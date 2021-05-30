@@ -1,0 +1,23 @@
+CC = gcc
+CCFLAGS = -Werror -Wall
+EXECUTABLE = bb
+SOURCES = bb_detect.c
+
+cur_dir= $(shell ls model/.)
+
+all: $(SOURCES)
+	echo $(cur_dir)
+ifeq ($(findstring AI,$(cur_dir)),AI)
+	@echo BBAI
+	$(CC) $(CCFLAGS) $(SOURCES) -o $(EXECUTABLE) -DBBAI
+	./$(EXECUTABLE)
+else ifeq ($(findstring Black,$(cur_dir)),Black)
+	@echo BBB
+	$(CC) $(CCFLAGS) $(SOURCES) -o $(EXECUTABLE) -DBBB
+	./$(EXECUTABLE)
+else
+	@echo Not Recognized HW
+endif
+
+clean: $(EXECUTABLE)
+	rm $(EXECUTABLE) model/*
