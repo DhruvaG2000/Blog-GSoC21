@@ -16,3 +16,21 @@ As discussed, I have to make the following changes here:
 Try with gcc, or else use the _clpru toolchain_.  
 
 Also, add the disasm prudis to makefile as follows: ``prudis file.bin | sed 's/^\(.*\)$/" \1\\n"/' > included_assembly.h``
+
+## Asm files
+
+**pru_rtaudio.p** 
+- If I replace the older addresses with the one’s for BBAi, will that not break BBB compatibility? How can we tackle this issue? <br>
+_soln:_ you can use #ifdef to make them conditional at compile time. The Makefile could detect whether we are running on an AM335x or an AM572x and define a flag accordingly. This same flag can be used for conditional compilation of the libprussdrv vs rproc stuff in core/PRU.cpp. This could be the initial approach because it’s faster to get it done. Later in the project, we could move to a runtime flag if appropriate by passing a flag to the PRU at runtime for whether we are on am335x or am527x
+and allow it to select the relevant addresses at runtime. [source](https://forum.beagleboard.org/t/bela-support-for-bbai-later-ti-chips/29257/6)
+
+- We are using only MCASP1 on the BBAI, so you don’t really need MCASP2. Also, the define for MCASP1 on the AM335x is not needed, because we never use that. <br>
+The MCSPI and GPIO addresses will also need to change between the two boards. 
+The following Table compares the Hex addresses of these pins. 
+| Pin name/  Definition | BBB Addr    | BBAI Addr   | Comments/notes                                                                                   |   |
+|-----------------------|-------------|-------------|--------------------------------------------------------------------------------------------------|---|
+| McASP0 CFG            | 0x4803_C000 | 0x4846_4000 | most of following BBB offsets are same, so mostly changing the base address only should suffice. |   |
+| McSPI                 |             |             | Didn't find where McSPI are used in the asm files, so didn't look it up for now                  |   |
+| GPIO0                 | 0x44E07000  |             | TODO                                                                                             |   |
+| GPIO1                 | 0x4804C000  |             | TODO                                                                                             |   |
+
