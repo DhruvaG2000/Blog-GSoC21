@@ -31,6 +31,6 @@ The following Table compares the Hex addresses of these pins.
 |-----------------------|-------------|-------------|--------------------------------------------------------------------------------------------------|---|
 | McASP0 CFG            | 0x4803_C000 | 0x4846_4000 | most of following BBB offsets are same, so mostly changing the base address only should suffice. |   |
 | McSPI                 |             |             | Didn't find where McSPI are used in the asm files, so didn't look it up for now                  |   |
-| GPIO0                 | 0x44E07000  |             | TODO                                                                                             |   |
+| GPIO0                 | 0x44E07000  |             | see [#L43-L49](https://github.com/giuliomoro/Bela-private-dhruva/blob/bbai-mcasp/pru/pru_rtaudio.p#L43-L49) DAC_GPIO                                                                                             |   |
 | GPIO1                 | 0x4804C000  |             | TODO                                                                                             |   |
 
