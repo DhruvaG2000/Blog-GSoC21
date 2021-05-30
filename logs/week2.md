@@ -1,5 +1,5 @@
 ---
-sort: 1
+sort: 3
 ---
 # Logs from May 27 to June 3
 - Bela Cape with Trill Sensors has shipped from London. (ETA Jun 2)

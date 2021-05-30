@@ -1,5 +1,5 @@
 ---
-sort: 1
+sort: 2
 ---
  
 # Logs from May 19 to May 26
