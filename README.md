@@ -1,8 +1,8 @@
 # GSoC 2021: Bela Support for the BBAI
 You can find the link to my proposal: Bela compatibility for the BBAI [here.](https://elinux.org/BeagleBoard/GSoC/2021_Proposal/bela_on_bbai)
 
-This Blog talks about everything from linux filestructure, the boot process, accessing the PRUs, and much more! You can find all the important links, references and resources for making your projects with the BBAI.  Hope you find this helpful!  
-Most of my reference was the book _Exploring BeagleBone. Tools and Techniques for Building with Embedded Linux by Derek Molloy_, so be sure to check it out as well!
+This Blog talks about everything I have learned so far about the Bela Platform and BeagleBoards. This includes everything from linux filestructure, the boot process, accessing the PRUs, Real-time Kernels and much more! Hope you find this helpful!  
+Most of the basics are referred from the book _Exploring BeagleBone. Tools and Techniques for Building with Embedded Linux by Derek Molloy_, so be sure to check it out as well!
 
 # Table of Contents
 1. [Introduction](#Introduction)
