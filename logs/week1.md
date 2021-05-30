@@ -1,4 +1,8 @@
-## Logs from May 19 to May 26
+---
+sort: 1
+---
+ 
+# Logs from May 19 to May 26
 
 - Skimmed through the Bela Makefile. (didn't understand much, realized I needed to study GNU Make further)
 - Went through the proposal revise the workflow

@@ -2,7 +2,7 @@
 sort: 1
 ---
 
-# Bela
+# Introduction to Bela
 Bela provides ultra-low latency, high quality audio, analog and digital I/O in a tiny self-contained package.  It also features an on-board IDE that launches right in the browser. </br>
 Bela has
 - 8 channels of 16-bit analog I/O,
