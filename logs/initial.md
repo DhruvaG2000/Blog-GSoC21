@@ -2,7 +2,9 @@
 sort: 1
 ---
 
-# Logs up-to May 18
+#Pre-Selection
+
+## Logs up-to May 18
 - Started writing proposal for BeagleBoard Blynk app support, but did not proceed as the chances of it getting accepted seemed feeble.
 - Started writing proposal on Robot control library support for BBAI. (However there wasn't a clear cut solution or workflow that I could offer, which is why it probably got rejected.)
 - Made some minor contributions to the librobotcontrol git repo.
