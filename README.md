@@ -1,5 +1,7 @@
-# Short notes for the BBAI
-This includes everything from linux filestructure, the boot process, accessing the PRUs, and much more! You can find all the important links, references and resources for making your projects with the BBAI.  Hope you find this helpful!  
+# GSoC 2021: Bela Support for the BBAI
+You can find the link to my proposal: Bela compatibility for the BBAI [here.](https://elinux.org/BeagleBoard/GSoC/2021_Proposal/bela_on_bbai)
+
+This Blog talks about everything from linux filestructure, the boot process, accessing the PRUs, and much more! You can find all the important links, references and resources for making your projects with the BBAI.  Hope you find this helpful!  
 Most of my reference was the book _Exploring BeagleBone. Tools and Techniques for Building with Embedded Linux by Derek Molloy_, so be sure to check it out as well!
 
 # Table of Contents
@@ -18,7 +20,7 @@ Most of my reference was the book _Exploring BeagleBone. Tools and Techniques fo
     - [Interfacing to the Beagle Board buses](#buses)
     - [Real-Time Interfacing with the PRU-ICSS](#PRU)
     - [The Remote Processor Framework](#remoteproc)
-6. [Bela](bela/main.md)
+6. [Bela](Bela/README.md)
 7. [References](#ref)
 8. [Additional Help](#help)
 
@@ -115,4 +117,3 @@ The [remoteproc framework](https://www.kernel.org/doc/html/latest/staging/remote
 
 ## Additional Help <a name="help"></a>
 * [GNU Make](gnu-make-tutorial.md)
-
