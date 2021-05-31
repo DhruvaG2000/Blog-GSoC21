@@ -39,7 +39,14 @@ The following Table compares the Hex addresses of these pins.
 
 ## CPP Files
 
-**core/PRU.cpp** uses the following libprussdrv functions currently: 
+**core/PRU.cpp**
+Code for communicating with the Programmable Realtime Unit (PRU)
+on the BeagleBone AM335x series processors. The PRU loads and runs
+a separate code image compiled from an assembly file. Here it is
+used to handle audio and SPI ADC/DAC data.
+This code is specific to the PRU code in the assembly file; for example,
+it uses certain GPIO resources that correspond to that image. <br> 
+It uses the following libprussdrv functions currently: 
 1. ``prussdrv_map_prumem()     // Line 101``
 2. ``prussdrv_init()           // Line 443``
 3. ``prussdrv_open()          // Line 444``
@@ -50,4 +57,14 @@ The following Table compares the Hex addresses of these pins.
 
 
 ### RPROC
-Before we start discussing the cpp files, let's have a brief overview of the User API of rproc, and we will mainly go through the functions specific to our application.
+Before we start discussing the cpp files, let's have a brief overview of the User API of rproc, and we will mainly go through the functions specific to our application. ([ref1: rproc](https://www.kernel.org/doc/html/latest/staging/remoteproc.html), [ref2: rpmsg](https://www.kernel.org/doc/html/latest/staging/rpmsg.html))
+
+1. TODO
+2. ``int rproc_boot(struct rproc *rproc)`` // Boot a remote processor (i.e. load its firmware, power it on, …).
+If the remote processor is already powered on, this function immediately returns (successfully).
+Returns 0 on success, and an appropriate error value otherwise. Note: to use this function you should already have a valid rproc handle. There are several ways to achieve that cleanly (devres, pdata, the way remoteproc_rpmsg.c does this
+2. ``int rproc_add(struct rproc *rproc)`` // Register @rproc with the remoteproc framework, after it has been allocated with rproc_alloc().
+This is called by the platform-specific rproc implementation, whenever a new remote processor device is probed.
+
+3. ``void rproc_shutdown(struct rproc *rproc)`` // Power off a remote processor (previously booted with rproc_boot()). In case @rproc is still being used by an additional user(s), then this function will just decrement the power refcount and exit, without really powering off the device.
+Every call to rproc_boot() must (eventually) be accompanied by a call to rproc_shutdown(). Calling rproc_shutdown() redundantly is a bug.
