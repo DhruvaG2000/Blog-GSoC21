@@ -34,3 +34,20 @@ The following Table compares the Hex addresses of these pins.
 | McSPI                    	|             	|              	| Didn't find where McSPI are used in the asm files, so didn't look it up for now                             	|   	|
 | GPIO0                    	| 0x44E07000  	|              	| see [#L43-L49](https://github.com/giuliomoro/Bela-private-dhruva/blob/bbai-mcasp/pru/pru_rtaudio.p#L43-L49) 	|   	|
 | GPIO1                    	| 0x4804C000  	|              	|                                                                                                             	|   	|
+
+
+
+## CPP Files
+
+**core/PRU.cpp** uses the following libprussdrv functions currently: 
+1. ``prussdrv_map_prumem()     // Line 101``
+2. ``prussdrv_init()           // Line 443``
+3. ``prussdrv_open()          // Line 444``
+4. ``prussdrv_exec_code()     // Line 864``
+5. ``prussdrv_exec_program()  // Line 874``
+6. ``prussdrv_pru_disable()   // Line 1686``
+7. ``prussdrv_exit()          // Line 1694 ``
+
+
+### RPROC
+Before we start discussing the cpp files, let's have a brief overview of the User API of rproc, and we will mainly go through the functions specific to our application.

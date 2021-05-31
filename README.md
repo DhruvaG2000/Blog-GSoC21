@@ -102,6 +102,8 @@ In this example, PRU0 is controlled, and the firmware from the ``/lib/firmware/a
 
 The [remoteproc framework](https://www.kernel.org/doc/html/latest/staging/remoteproc.html) allows different platforms/architectures to control (power on, load firmware, power off) those remote processors while abstracting the hardware differences, so the entire driver doesn’t need to be duplicated
 
+To see how RPROC headers will be used, goto BELA DOCUMENTATION/The Bela Code/ [PRU.cpp](https://dhruvag2000.github.io/Blog-GSoC21/Bela/syntax-notes.html)
+
 ## References <a name="ref"></a>
 - My proposal: Bela compatibility for the BBAI: [proposal](https://elinux.org/BeagleBoard/GSoC/2021_Proposal/bela_on_bbai)
 - Official BBAI website: https://beagleboard.org/ai
