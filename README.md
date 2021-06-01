@@ -24,7 +24,7 @@ Most of the basics are referred from the book _Exploring BeagleBone. Tools and T
 7. [References](#ref)
 8. [Additional Help](#help)
 
-**[My Project weekly logs can be found here](logs.md)**
+**[My Project weekly logs can be found here](https://dhruvag2000.github.io/Blog-GSoC21/logs)**
 
 ## Introduction to beagleboard and the BeagleBone® AI <a name="Introduction"></a>
 [The BeagleBoard](General.md) has been arround since 2008 and is a low-power open-source single-board computer produced by Texas Instruments in association with Digi-Key and Newark element14. It was designed with open source software development in mind.
