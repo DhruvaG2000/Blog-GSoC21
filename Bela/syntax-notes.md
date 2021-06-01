@@ -63,7 +63,7 @@ Before we start discussing the cpp files, let's have a brief overview of the Use
 2. - ``int rproc_boot(struct rproc *rproc)`` // Boot a remote processor (i.e. load its firmware, power it on, …).
 If the remote processor is already powered on, this function immediately returns (successfully). It returns 0 on success, and an appropriate error value otherwise. Note: to use this function you should already have a valid rproc handle. There are several ways to achieve that cleanly (devres, pdata, the way remoteproc_rpmsg.c does this
 
-- ``int rproc_add(struct rproc *rproc)`` // Register @ rproc with the remoteproc framework, after it has been allocated with rproc_alloc().
+    - ``int rproc_add(struct rproc *rproc)`` // Register @ rproc with the remoteproc framework, after it has been allocated with rproc_alloc().
 This is called by the platform-specific rproc implementation, whenever a new remote processor device is probed.
 
 3. todo
