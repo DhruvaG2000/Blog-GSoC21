@@ -60,11 +60,19 @@ It uses the following libprussdrv functions currently:
 Before we start discussing the cpp files, let's have a brief overview of the User API of rproc, and we will mainly go through the functions specific to our application. ([ref1: rproc](https://www.kernel.org/doc/html/latest/staging/remoteproc.html), [ref2: rpmsg](https://www.kernel.org/doc/html/latest/staging/rpmsg.html))
 
 1. TODO
-2. ``int rproc_boot(struct rproc *rproc)`` // Boot a remote processor (i.e. load its firmware, power it on, …).
+2. - ``int rproc_boot(struct rproc *rproc)`` // Boot a remote processor (i.e. load its firmware, power it on, …).
 If the remote processor is already powered on, this function immediately returns (successfully).
 Returns 0 on success, and an appropriate error value otherwise. Note: to use this function you should already have a valid rproc handle. There are several ways to achieve that cleanly (devres, pdata, the way remoteproc_rpmsg.c does this
-2. ``int rproc_add(struct rproc *rproc)`` // Register @rproc with the remoteproc framework, after it has been allocated with rproc_alloc().
+- ``int rproc_add(struct rproc *rproc)`` // Register \@rproc with the remoteproc framework, after it has been allocated with rproc_alloc().
 This is called by the platform-specific rproc implementation, whenever a new remote processor device is probed.
 
-3. ``void rproc_shutdown(struct rproc *rproc)`` // Power off a remote processor (previously booted with rproc_boot()). In case @rproc is still being used by an additional user(s), then this function will just decrement the power refcount and exit, without really powering off the device.
+3. todo
+
+4. todo
+
+5. todo
+
+6. todo
+
+7. ``void rproc_shutdown(struct rproc *rproc)`` // Power off a remote processor (previously booted with rproc_boot()). In case \@rproc is still being used by an additional user(s), then this function will just decrement the power refcount and exit, without really powering off the device.
 Every call to rproc_boot() must (eventually) be accompanied by a call to rproc_shutdown(). Calling rproc_shutdown() redundantly is a bug.
