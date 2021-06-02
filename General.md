@@ -15,23 +15,24 @@ The BeagleBone Black was one of the first ever BeagleBoards I have had, and it w
 4. I was also looking out for how I could utilize the entire space on my 32 GB SD Card, as bu default it was only using about 4 GB. So I followd these steps from [here](https://elinux.org/Beagleboard:Expanding_File_System_Partition_On_A_microSD):
     1. Follow most of the steps as it says, make sure you are **booted from the SD Card** and __not__ on board EMMC.
     2. One thing you may be asked is: 
-    ```
+```
     Created a new partition 1 of type 'Linux' and of size 29.7 GiB.
     Partition #1 contains a ext4 signature.
     Do you want to remove the signature? [Y]es/[N]o:N
         
-    ```
+```
     Where you have to type in N and press enter. 
 
-    3. ``reboot`` after everything is done.
+    3. `reboot` after everything is done.
     4. Now don't forget ``resize2fs /dev//mmcblk0p1`` as root and you'll get a similar output: 
-    ```
+
+```
     resize2fs 1.43.4 (31-Jan-2017)
     Filesystem at /dev//mmcblk0p1 is mounted on /; on-line resizing required
     old_desc_blocks = 1, new_desc_blocks = 4
     The filesystem on /dev//mmcblk0p1 is now 7790720 (4k) blocks long.
+```
 
-    ```
     5. now you will see that you will be using the full SD card storage. 
 
 ## Keywords
