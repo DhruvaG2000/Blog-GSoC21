@@ -6,7 +6,7 @@ Let's have a look at _when_ one should consider using the Beagle Boards. <br>
 The Beagle boards are perfectly placed for the integration of high-level software and low-level electronics in any type of project. <br>
 The major advantage over more traditional embedded systems, such as the Arduino, PIC, and AVR microcontrollers, is apparent when you leverage the Linux OS for your projects. For example, if you built a home automation system using the BeagleBone and you then decided that you wanted to make certain information available on the internet, you could simply install a web server.
 
-##Setting up the BeagleBone
+## Setting up the BeagleBone
 
 The BeagleBone Black was one of the first ever BeagleBoards I have had, and it was a bit of a hassle for me to set it up initially. Few things to keep in mind here. 
 1. I was using _Linux Mint 20.1 x86_64 , DE: Cinnamon_. For some reason, wired network connections were not working for me, neither ethernet nor USB. I had to serially get into the BBB to see if it was actually working atall. I then switched to dual booted Ubuntu DDE wherein I was easily able to open the cloud-9 IDE and then went on to ssh into it via the terminal. 
