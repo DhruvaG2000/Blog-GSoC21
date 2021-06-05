@@ -1,5 +1,5 @@
 ---
-sort: 1
+sort: 2
 ---
 
 # Installing Xenomai Kernel and Libraries
@@ -30,7 +30,57 @@ Now you only really need to note the _4.14.108-ti-xenomai-r143_ part of the outp
 [    1.158174] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 4.14.108-ti-xenomai-r143 #1buster
 [    1.509155] usb usb1: Manufacturer: Linux 4.14.108-ti-xenomai-r143 musb-hcd
 ```
+Here, note the line `[    1.110019] [Xenomai] Cobalt v3.0.11`. This step is very important, as if there's any version mis-match then you will face issues later.
 
+3. Now head over to [stable release tarballs](https://xenomai.org/downloads/xenomai/stable/) and download the version that matches the Cobalt version we saw above. In my case, I couldn't find the exact matching version, however `xenomai-3.0.10` worked for me.
+Extract the suitable version in your home and then you will have to make a fresh clean build directory. Your overall tree should look something like this: 
+```
+├── build
+│   └── xenomai
+└── xenomai-3.0.10
+    ├── aclocal.m4
+    ├── config
+    ├── configure
+    ├── configure.ac
+    ├── debian
+    ├── demo
+    ├── doc
+    ├── include
+    ├── kernel
+    ├── lib
+    ├── Makefile.am
+    ├── Makefile.in
+    ├── README
+    ├── scripts
+    ├── testsuite
+    └── utils
+```
+`cd` into the build/xenomai directory and type in 
+```sh
+sudo ../../xenomai-3.0.10/configure --enable-smp
+```
+after this is done, make sure no errors were encountered and then run 
+```sh
+sudo make install
+```
+It will take some time for it to compile everything and once it's done reboot your device. 
+Run `sudo /usr/xenomai/bin/latency ` and if you get an output similar to this:
+```sh
+== Sampling period: 1000 us
+== Test mode: periodic user-mode task
+== All results in microseconds
+warming up...
+RTT|  00:00:01  (periodic user-mode task, 1000 us period, priority 99)
+RTH|----lat min|----lat avg|----lat max|-overrun|---msw|---lat best|--lat worst
+RTD|      4.458|      7.504|     49.833|       0|     0|      4.458|     49.833
+RTD|      4.416|      5.915|     33.958|       0|     0|      4.416|     49.833
+RTD|      4.374|      5.142|     31.166|       0|     0|      4.374|     49.833
+^C---|-----------|-----------|-----------|--------|------|-------------------------
+RTS|      4.374|      6.187|     49.833|       0|     0|    00:00:04/00:00:04
+```
+then Congrats! You have successfully installed the Xenomai libraries and Kernel on your BeagleBone! 
 
+4. Testing your installation: <br>
+Run 
 ## References 
 1. [Xenomai Wiki](https://source.denx.de/Xenomai/xenomai/-/wikis/Installing_Xenomai_3#library-install)
