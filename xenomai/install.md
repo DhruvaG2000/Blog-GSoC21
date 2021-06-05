@@ -64,6 +64,8 @@ after this is done, make sure no errors were encountered and then run
 sudo make install
 ```
 It will take some time for it to compile everything and once it's done reboot your device. 
+
+4. Testing your installation:
 Run `sudo /usr/xenomai/bin/latency ` and if you get an output similar to this:
 ```sh
 == Sampling period: 1000 us
@@ -80,7 +82,6 @@ RTS|      4.374|      6.187|     49.833|       0|     0|    00:00:04/00:00:04
 ```
 then Congrats! You have successfully installed the Xenomai libraries and Kernel on your BeagleBone! 
 
-4. Testing your installation: <br>
-Run 
 ## References 
+
 1. [Xenomai Wiki](https://source.denx.de/Xenomai/xenomai/-/wikis/Installing_Xenomai_3#library-install)
