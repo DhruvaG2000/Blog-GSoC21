@@ -1,6 +1,6 @@
- ---
- sort: 2
- ---
+---
+sort: 1
+---
 
 # Installing Xenomai Kernel and Libraries
 
