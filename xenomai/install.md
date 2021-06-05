@@ -65,8 +65,8 @@ sudo make install
 ```
 It will take some time for it to compile everything and once it's done reboot your device. 
 
-4. Testing your installation:
-Run `sudo /usr/xenomai/bin/latency ` and if you get an output similar to this:
+4. Testing your installation: <br>
+Run `sudo /usr/xenomai/bin/latency` and if you get an output similar to this:
 ```sh
 == Sampling period: 1000 us
 == Test mode: periodic user-mode task
