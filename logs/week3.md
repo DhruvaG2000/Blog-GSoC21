@@ -17,3 +17,4 @@ sort: 4
 - Ran Robert Nelson's update script and got xenomai patched kernel running.
 - Installed Xenomai Libraries on the BBAI and ran the latency test (which also worked). 
 - Cloned the development Bela Repo. 
+- Source Compiled Bela Repo on the BBB, tried to compile and run examples but ran into a few errors.
