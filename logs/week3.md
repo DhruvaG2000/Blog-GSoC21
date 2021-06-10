@@ -18,3 +18,7 @@ sort: 4
 - Installed Xenomai Libraries on the BBAI and ran the latency test (which also worked). 
 - Cloned the development Bela Repo. 
 - Source Compiled Bela Repo on the BBB, tried to compile and run examples but ran into a few errors.
+- Recieved the BELA Shipment on 10th June, 2021. (Had to pay customs charges at doorstep)
+- Tested BELA Cape basic examples like sine-tone, scope and .wav player on the proper BELA image.
+- Debugged errors that were faced earlier on the source compile that I was doing on debian-xenomai patched image. 
+- Finally got the sine-tone example to work. All the errors faced and solutions can be found in the thread "BUILDING BELA Core on BB" in the #gsoc channel on slack.
