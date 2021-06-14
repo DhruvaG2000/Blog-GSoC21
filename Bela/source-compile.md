@@ -141,3 +141,7 @@ Trying modprobe rtdm_pruss_irq returns
 modprobe: FATAL: Module rtdm_pruss_irq not found in directory /lib/modules/4.14.108-ti-xenomai-r143
 ```
 then build with `BELA_USE_DEFINE=BELA_USE_POLL` for now. This will remove the dependency on the rtdm_pruss_irq  driver
+
+## Resources
+1. [BB.org overlays](https://github.com/BelaPlatform/bb.org-overlays)
+2. 
