@@ -29,11 +29,13 @@ sudo cp /boot/dtbs/4.19.94-ti-xenomai-r64/am5729-beagleboneai.dtb am5729-beagleb
 
 * Loading the overlay
 To load the overlays during boot you have to edit ``/boot/uEnv.txt``. 
+
 ```
 enable_uboot_overlays=1
 
 uboot_overlay_addr4=/lib/firmware/BBAI-AUDI-02-00A0.dtbo
 ```
+
 Now reboot after this and if everything goes right, then the commands below should give similar outputs:
 ```sh
 debian@beaglebone:~$ aplay -l
