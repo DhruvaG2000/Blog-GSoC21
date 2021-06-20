@@ -14,3 +14,8 @@ sort: 5
 - Had a meet with Deepak Khatri to discuss CCL and a brief introduction as to how to write overlays for the BBAI. I will now attempt to port the older BB-BONE-AUDI overlay to the AI using the CCL.
 - Wrote the first version of the overlay, where I basically just disabled all the required pins just to run a basic check if the overlay will load or not, and it did load alright. Faced challenges when it came to the pinmux part I was constantly getting the error ``FDT_ERR_NOTFOUND``. My mentor suggested I try fdtoverlay next for perhaps improved debugging. 
 - So far I have gathered which pins are used by the audio cape and what pin mux configuration I need to use them in. I tested the old dts file made by giuliomoro by compiling it and loading it into ``/boot/dtb/4.19.94-ti-xenomai-r64`` and seems to work even on ``4.19.94-ti-xenomai-r64`` as I tested playing music and got positive results.
+- Finally debugged the new overlay, named [BBAI-AUDI-02-00A0.dts](https://github.com/beagleboard/BeagleBoard-DeviceTrees/blob/v4.19.x-ti-overlays/src/arm/overlays/BBAI-AUDI-02-00A0.dts) and got it working with the AI+Bela cape. It has been merged in the official BeagleBoard-DeviceTrees repo under overlays. This is where I complete my **Milestone 1** ie.
+    1. Introductory YouTube video
+    2. Setting pinmux values appropriately and fix the dtb to get the correct clock on the McASP MCLK pin.
+    3. verify it works running with ALSA using the BB-BONE-AUDI overlay.
+
