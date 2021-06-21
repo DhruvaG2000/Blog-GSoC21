@@ -30,7 +30,6 @@ sort: 6
  [   68.555376] pruss_uio_shmem 4b280000.pruss_shmem: Registering with uio       driver
  [   68.595980] pruss_uio_shmem 4b280000.pruss_shmem: Saving platform data
 ```
-
-    this probably indicates that there might be a way to still use libprussdrv's memory sharing part atleast, if incase rproc does not support that. Will have to check the user space library for the AI and if not, then how difficult would it be to port the am335 library to am57x? 
+this probably indicates that there might be a way to still use libprussdrv's memory sharing part atleast, if incase rproc does not support that. Will have to check the user space library for the AI and if not, then how difficult would it be to port the am335 library to am57x? 
     6. Robert M. and giuliomoro also discussed a few things about how ctag could also be able to get support on the AI, which lead me to understand that `pru/pru_rtaudio_irq.p` is actually the asm code for the CTAG. For now though, I will be mainly touching the McASP base addresses inside the asm code and not much else.
     7. Mentors present in today's meet: Stephen Arnold, Giulio Moro, Robert M.
