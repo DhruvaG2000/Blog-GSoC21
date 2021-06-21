@@ -10,5 +10,5 @@ sort: 6
     1. [Introductory YouTube video](https://www.youtube.com/watch?v=kLXCrlQwXeI)
     2. Setting pinmux values appropriately and fix the dt overlay to get the correct clock.
     3. verifying that it works running with ALSA using the BBAI-AUDI-02-00A0.dts overlay.
-
+- Had a weekly meet with mentors where we discussed the following:
 
