@@ -10,9 +10,9 @@ The explanation of the existing overlay: (thanks to my mentor @giuliomoro who he
 
 1. [fragment@0](https://github.com/BelaPlatform/bb.org-overlays/blob/master/src/arm/BB-BELA-00A1.dts#L19) is a way to disable any pins that are critical to Bela and may be owned by some sort of "universal" cape.
 
-2. [fragment@1]() disables the HDMI controller that would be on i2c0 on BBB.
+2. fragment@1 disables the HDMI controller that would be on i2c0 on BBB.
 
-3. [fragment@2](  ) does most of the pinmuxing: for mcasp, mcspi, i2c1, i2c2, and some PRU GPIO pins. It also defines pinmuxing for the bela Digital I/O, all of which are set to GPIO, INPUT ENABLED, PULLDOWN. For PocketBeagle (where the base device tree contains a universal cape) these are  `Px_yz_bela  pins`, which is later on assigned as the default value to ``Px_yz_pinmux``.  For Bela (given how BBB/BBG don't normally have a cape universal enabled) these are in ``pinmux_bb_digitals``. The pin groups defined here are later on assigned to individual drivers.
+3. fragment@2 does most of the pinmuxing: for mcasp, mcspi, i2c1, i2c2, and some PRU GPIO pins. It also defines pinmuxing for the bela Digital I/O, all of which are set to GPIO, INPUT ENABLED, PULLDOWN. For PocketBeagle (where the base device tree contains a universal cape) these are  `Px_yz_bela  pins`, which is later on assigned as the default value to ``Px_yz_pinmux``.  For Bela (given how BBB/BBG don't normally have a cape universal enabled) these are in ``pinmux_bb_digitals``. The pin groups defined here are later on assigned to individual drivers.
 
 4. fragment@3 sets the clock speed for _i2c1_. This is not strictly needed because _i2c1_ is not used by the Bela or BelaMini capes.
 
