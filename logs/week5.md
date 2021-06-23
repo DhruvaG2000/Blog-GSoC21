@@ -34,3 +34,5 @@ this probably indicates that there might be a way to still use libprussdrv's mem
 
     6. Robert M. and giuliomoro also discussed a few things about how ctag could also be able to get support on the AI, which lead me to understand that `pru/pru_rtaudio_irq.p` is actually the asm code for the CTAG. For now though, I will be mainly touching the McASP base addresses inside the asm code and not much else.
     7. Mentors present in today's meet: Stephen Arnold, Giulio Moro, Robert M.
+
+- Created BELA Audio overlay, added all the disabled pins from fragment 1 and some i2C and McASP part in the end. 
