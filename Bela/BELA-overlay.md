@@ -30,4 +30,26 @@ The explanation of the existing overlay: (thanks to my mentor @giuliomoro who he
 
 11. fragment@10  enables i2c2, sets it clock frequency and pins
 
+## BELA overlay using the CCL:
 
+Under fragment2:
+```
+/* Pinmux for McASP0 (audio i/o) (BBB) */
+mcasp0_ahclkx, 		P9_25 | MODE0 | OUTPUT_PULLDOWN
+mcasp0_axr2, 			P9_28 | MODE2 | INPUT_PULLDOWN
+mcasp0_fsx, 			P9_29 | MODE0 | INPUT_PULLDOWN
+mcasp0_aclkx, 		P9_31 | MODE0 | INPUT_PULLDOWN
+mcasp0_axr0, 			P9_30 | MODE0 | INPUT_PULLDOWN
+(in BBAI: (similar to Audi overlay))
+    P9_25_pinmux { pinctrl-0 = <&P9_25_mcasp_pin>; };  /* xref_clk0.mcasp1_ahclkx */
+    P9_28_pinmux { pinctrl-0 = <&P9_28_mcasp_pin>; };  /* mcasp1_axr11.mcasp1_axr11 */
+    P9_29_pinmux { pinctrl-0 = <&P9_29_mcasp_pin>; };  /* mcasp1_fsx.mcasp1_fsx, mcasp1_axr9.off */
+    P9_30_pinmux { pinctrl-0 = <&P9_30_mcasp_pin>; };  /* mcasp1_axr10.mcasp1_axr10 */
+    P9_31_pinmux { pinctrl-0 = <&P9_31_mcasp_pin>; };  /* mcasp1_aclkx.mcasp1_aclkx, mcasp1_axr8.off */
+
+/* Pinmux for McSPI0 (analog i/o) */
+spi0_sclk, 			P9_22 | MODE0 | INPUT_PULLUP
+spi0_d0, 				P9_21 | MODE0 | INPUT_PULLUP
+spi0_d1, 				P9_18 | MODE0 | OUTPUT_PULLUP
+spi0_cs0, 			P9_17 | MODE0 | OUTPUT_PULLUP
+```
