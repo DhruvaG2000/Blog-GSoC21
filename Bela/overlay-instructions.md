@@ -17,7 +17,7 @@ sudo cp /boot/dtbs/4.19.94-ti-xenomai-r64/am5729-beagleboneai.dtb am5729-beagleb
 ```
 
 * Installing the compatibility layer
-    1. Clone the repository ``git clone https://github.com/DhruvaG2000/BeagleBoard-DeviceTrees.git``
+    1. Clone the repository ``git clone https://github.com/beagleboard/BeagleBoard-DeviceTrees.git``
     2. Change directory, ``cd BeagleBoard-DeviceTrees``
     3. Compile code, ``make``
     4. Install the dtb file on your board ``sudo cp src/arm/am5729-beagleboneai.dtb /boot/dtbs/4.19.94-ti-xenomai-r64/.``
