@@ -46,7 +46,7 @@ a separate code image compiled from an assembly file. Here it is
 used to handle audio and SPI ADC/DAC data.
 This code is specific to the PRU code in the assembly file; for example,
 it uses certain GPIO resources that correspond to that image. <br> 
-It uses the following libprussdrv functions currently: ([ref1: Ti_AM33XX_PRUSSv2](https://elinux.org/Ti_AM33XX_PRUSSv2#Host_to_PRU_.28ARM_Cortex-A8_to_PRU.29)) 
+It uses the following libprussdrv functions currently: ([ref1: Ti_AM33XX_PRUSSv2](https://elinux.org/Ti_AM33XX_PRUSSv2#Host_to_PRU_.28ARM_Cortex-A8_to_PRU.29), [prussdrv.h](https://github.com/beagleboard/am335x_pru_package/blob/master/pru_sw/app_loader/include/prussdrv.h), [prussdrv.c](https://github.com/beagleboard/am335x_pru_package/blob/master/pru_sw/app_loader/interface/prussdrv.c), [examples](https://github.com/beagleboard/am335x_pru_package/tree/master/pru_sw/example_apps) ) 
 1. ``prussdrv_map_prumem()     // Line 101`` 
 2. ``prussdrv_init()           // Line 443`` Initialize the PRU
 3. ``prussdrv_open()          // Line 444``
