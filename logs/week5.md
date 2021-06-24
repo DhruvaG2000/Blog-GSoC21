@@ -38,3 +38,7 @@ this probably indicates that there might be a way to still use libprussdrv's mem
 - Started writing about The BELA Cape overlay on my blog, and listed info of all the fragments.
 
 - Created BELA Audio overlay, added all the disabled pins from fragment 1 and some i2C and McASP part in the end. 
+
+- Started noting down the BASE Addresses used by the BELA rtaudio.p code in the BB Black, and finding equivalent hex addresses in the BBAI at the same header locations.
+
+- **Verified workflow:** As was discussed in the proposal, the workflow was to build asm files using pasm and then use prudis to disasm and then compile it in main.c using clpru. This workflow was verified by me partially today as the code compiled and gave an obj file without any errors on the BBAI.
