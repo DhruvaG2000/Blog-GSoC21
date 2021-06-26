@@ -57,7 +57,7 @@ It uses the following libprussdrv functions currently: ([ref1: Ti_AM33XX_PRUSSv2
 
 
 ### RPROC
-Before we start discussing the cpp files, let's have a brief overview of the User API of rproc, and we will mainly go through the functions specific to our application. ([ref1: rproc](https://www.kernel.org/doc/html/latest/staging/remoteproc.html), [ref2: rpmsg](https://www.kernel.org/doc/html/latest/staging/rpmsg.html))
+Before we start discussing the cpp files, let's have a brief overview of the User API of rproc, and we will mainly go through the functions specific to our application. ([ref1: rproc](https://www.kernel.org/doc/html/latest/staging/remoteproc.html), [ref2: rpmsg](https://www.kernel.org/doc/html/latest/staging/rpmsg.html), [ref3: linux docs](https://docs.huihoo.com/doxygen/linux/kernel/3.7/remoteproc_8h.html)) 
 
 1. TODO
 2. - ``int rproc_boot(struct rproc *rproc)`` // Boot a remote processor (i.e. load its firmware, power it on, …).
