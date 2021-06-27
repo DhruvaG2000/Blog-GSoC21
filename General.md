@@ -36,6 +36,53 @@ The BeagleBone Black was one of the first ever BeagleBoards I have had, and it w
 ```
   5. now you will see that you will be using the full SD card storage.
 
+## Backup
+Inorder to take a backup of your entire SD card, run the command:
+```sh
+sudo dd if=/dev/sdd of=backup.img bs=1M count=4096 status=progress
+```
+where,
+- if= is the location of your sd card (type lsblk and u shall know)
+- of= is the output file which will be the backup on your PC
+- bs= is block size, suggest keeping it as 1M only
+- count= is the size u want your bkp image to be, it is in MB
+- status= shows you the live status
+
+## PRU
+
+[ref1: Rebuilding PRU Firmwares on Target Using Sitara Processors](https://training.ti.com/rebuilding-pru-firmwares-target-using-sitara-processors?context=519066-1138864-1134151)
+The most basic example is given on the homepage where you can learn how to simple start or stop the PRU. Here, we will look at some basic examples in C which can be downloaded from `git clone git://git.ti.com/pru-software-support-package/pru-software-support-package.git`. Let's look at how to run the most basic example that echos whatever we send to the PRU back to us.
+
+```sh
+# Make sure that you are su
+$ sudo -i   # Enter the passwd: temppwd
+$ cd /home/debian/pru-software-support-package/examples/am572x/PRU_RPMsg_Echo_Interrupt1_0  # Navigate to the example
+$ export PRU_CGT=/usr/share/ti/cgt-pru
+$ ln -s /usr/bin/ /usr/share/ti/cgt-pru/bin # Create a symbolic link
+$ vim main.c
+```
+Now, go to line#101 and inside the while loop write:
+```c
+payload[0] = 'T'
+payload[1] = 'I'
+```
+Once done, save and exit the editor and then run `make`
+<br>
+Assuming that everything went as planned, you should see an output like this:
+```sh
+Building project: PRU_RPMsg_Echo_Interrupt1_0
+
+Output files can be found in the "gen" directory
+
+Finished building project: PRU_RPMsg_Echo_Interrupt1_0
+```
+and the contents of `gen` folder should look something like this:
+```sh
+-rw-r--r-- 1 root root 74832 Jun 27 05:25 PRU_RPMsg_Echo_Interrupt1_0.out
+-rw-r--r-- 1 root root 14595 Jun 27 05:25 PRU_RPMsg_Echo_Interrupt1_0.map
+-rw-r--r-- 1 root root 58664 Jun 27 05:25 main.object
+-rw-r--r-- 1 root root   747 Jun 27 05:25 main.pp
+```
 ## Keywords
 
 Some keywords to remember:-
