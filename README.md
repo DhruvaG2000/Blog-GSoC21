@@ -93,7 +93,7 @@ First, I suggest you navigate to `/dev/remoteproc/pruss1-core0` as su. Then, try
 $ echo 'stop' > state   # this will stop the PRU
 $ cat state
 > offline
-$ echo 'am335x-pru0-fw' > firmware  # Refer below for the actual location
+$ echo 'am57xx-pru1_0-fw' > firmware  # Refer below for the actual location
 $ echo 'start' > state
 $ cat state
 > running   #This will again start the PRU1_core 0
