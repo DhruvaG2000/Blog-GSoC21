@@ -61,7 +61,12 @@ $ export PRU_CGT=/usr/share/ti/cgt-pru
 $ ln -s /usr/bin/ /usr/share/ti/cgt-pru/bin # Create a symbolic link
 $ vim main.c
 ```
-Now, go to line#101 and inside the while loop write:
+First change the following lines:
+```c
+#define CHAN_DESC                       "Channel 39"
+#define CHAN_PORT                       39
+```
+and then, go to line#101 and inside the while loop write:
 ```c
 payload[0] = 'T'
 payload[1] = 'I'
@@ -83,6 +88,38 @@ and the contents of `gen` folder should look something like this:
 -rw-r--r-- 1 root root 58664 Jun 27 05:25 main.object
 -rw-r--r-- 1 root root   747 Jun 27 05:25 main.pp
 ```
+Now you need to first make a folder by the name `pru` in `\lib\firmware\.` and then,
+```sh
+cp /home/debian/pru-software-support-package/examples/am572x/PRU_RPMsg_Echo_Interrupt1_0/gen/PRU_RPMsg_Echo_Interrupt1_0.out echomod.out
+```
+Now you need to create a symbolic link to this new pru firmware, and delete the older one.
+```sh
+rm am57xx-pru1_0-fw;ln -s /lib/firmware/pru/echomod.out am57xx-pru1_0-fw
+```
+After this, `cd /dev/remoteproc/` and then `cd` into `pruss1-core0/`. Here, you will first stop the pru incase it is running using `echo 'stop' > state`. Now it's time to load the new firmware into the PRU using:
+```sh
+echo 'am57xx-pru1_0-fw' > firmware
+```
+Finally, the new program has been uploaded and you can start the PRU again using `echo 'start' > state`.
+<br>
+To test this, we will check first if the right rpmsg handle has been created in `/dev/` folder using
+```
+# ls /dev/ | grep pru
+rpmsg_pru39
+```
+If you get an output similar to above, everything is going great so far! Now we can finally get to testing if our new program works that basically replaces the first 2 characters of the input string. To do that, we will
+```
+$ echo 'test' > /dev/rpmsg_pru39
+# The above just sends test as the input string to the PRU
+# Now to view the result, we will
+$ cat /dev/pmsg_pru39
+TIst
+```
+If you get that output to `cat` then the firmware has been loaded and is up and running successfully. You have just learned the following from this tutorial:
+- loading firmware onto the PRU
+- accessing the PRU via remoteproc and rpmesg handles
+- writing your own programs for the PRU using the pru-software-support-package.
+
 ## Keywords
 
 Some keywords to remember:-
