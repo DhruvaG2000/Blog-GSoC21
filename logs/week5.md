@@ -42,3 +42,5 @@ this probably indicates that there might be a way to still use libprussdrv's mem
 - Started noting down the BASE Addresses used by the BELA rtaudio.p code in the BB Black, and finding equivalent hex addresses in the BBAI at the same header locations.
 
 - **Verified workflow:** As was discussed in the proposal, the workflow was to build asm files using pasm and then use prudis to disasm and then compile it in main.c using clpru. This workflow was verified by me partially today as the code compiled and gave an obj file without any errors on the BBAI.
+
+- **Learning PRU:** I realised that I had was very much lacking knowledge of how to use the PRU's and most of the tutorials online were made for the BeagleBone Black. There were many changes in the methods and locations of files that I had to figure mostly on my own. I have hence written a proper step-by-step tutorial on my blog for beginners on how to properly use and program the PRU on the BBAI.
