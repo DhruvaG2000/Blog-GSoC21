@@ -88,16 +88,17 @@ Courtesy of the Ti AM572x SRM.
 ### The Remote Processor Framework <a name="remoteproc"></a>
 It allows a main processor that is running Linux to control the slave processors via OS device bindings.
 Example:
+First, I suggest you navigate to `/dev/remoteproc/pruss1-core0` as su. Then, try the following <br>
 ```sh
-$ echo 'stop' > state
+$ echo 'stop' > state   # this will stop the PRU
 $ cat state
 > offline
-$ echo 'am335x-pru0-fw' > firmware
+$ echo 'am335x-pru0-fw' > firmware  # Refer below for the actual location
 $ echo 'start' > state
 $ cat state
-> running
+> running   #This will again start the PRU1_core 0
 ```
-In this example, PRU0 is controlled, and the firmware from the ``/lib/firmware/am335x-pru0-fw`` file is loaded into the PRU.
+In this example, PRU0 is controlled, and the firmware from the ``/lib/firmware/am57xx-pru1_0-fw`` file is loaded into the PRU.
 **note:** The PRU must be stopped before you can write new PRU programs.
 
 The [remoteproc framework](https://www.kernel.org/doc/html/latest/staging/remoteproc.html) allows different platforms/architectures to control (power on, load firmware, power off) those remote processors while abstracting the hardware differences, so the entire driver doesn’t need to be duplicated
