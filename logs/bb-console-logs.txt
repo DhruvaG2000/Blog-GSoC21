@@ -1,0 +1,25 @@
+If you ever happen to want to link against installed libraries
+in a given directory, LIBDIR, you must either use libtool, and
+specify the full pathname of the library, or use the '-LLIBDIR'
+flag during linking and do at least one of the following:
+   - add LIBDIR to the 'LD_LIBRARY_PATH' environment variable
+     during execution
+   - add LIBDIR to the 'LD_RUN_PATH' environment variable
+     during linking
+   - use the '-Wl,-rpath -Wl,LIBDIR' linker flag
+   - have your system administrator add LIBDIR to '/etc/ld.so.conf'
+#### ^ While installing Xenomai ^ ####
+
+if test -r //usr/xenomai/etc/udev/udev.rules ; then \
+    for f in ../xenomai-3.1/kernel/cobalt/udev/*.rules ; do \
+	b=`basename $f` ; \
+	grep -q Xenomai:`basename $b .rules` //usr/xenomai/etc/udev/udev.rules || \
+	( echo ; cat $f ) >> //usr/xenomai/etc/udev/udev.rules ; \
+    done ; \
+else \
+    /bin/bash /root/xenomai-3.1/config/install-sh -d //usr/xenomai/etc/udev/rules.d; \
+    for f in ../xenomai-3.1/kernel/cobalt/udev/*.rules ; do \
+	/usr/bin/install -c -m 644 $f //usr/xenomai/etc/udev/rules.d/ ; \
+    done ; \
+fi
+
