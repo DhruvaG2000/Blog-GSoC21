@@ -50,7 +50,7 @@ It uses the following libprussdrv functions currently: ([ref1: Ti_AM33XX_PRUSSv2
 1. ``prussdrv_map_prumem()     // Line 101`` 
 2. ``prussdrv_init()           // Line 443`` Initialize the PRU
 3. ``prussdrv_open()          // Line 444``
-4. ``prussdrv_exec_code()     // Line 864``
+4. ``prussdrv_exec_code(int prunum, const unsigned int *code, int codelen)     // Line 864``
 5. ``prussdrv_exec_program()  // Line 874`` Execute example on PRU0 where first argument is the PRU# and second is the assembly to execute
 6. ``prussdrv_pru_disable()   // Line 1686``
 7. ``prussdrv_exit()          // Line 1694 ``
