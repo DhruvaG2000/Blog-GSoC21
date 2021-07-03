@@ -21,4 +21,10 @@ sort: 7
 
 - My mentor debugged the earlier issues regarding "the compilation of assembly code, but it did not work on PRU" and has provided logs on the [Bela slack thread here](https://beagleboard.slack.com/archives/C0SLDS49M/p1625160291078200?thread_ts=1621443657.059500&cid=C0SLDS49M).
 
-- Started writing PRU ``start``, ``stop`` and ``load firmware`` code in c++, tested if it works and pushed to repo under the branch `ai-onboard-testing`. The purpose of this branch isn't exactly to be merged with main branch but to just perform quick small tests on the AI and once proven then subsequently a cleaner and proper code will be written in another branch which can later be merged into the main branch. Currently thinking of making a header file for ``PRU_AI_RPROC.h`` which will contains all the functions required to manage the PRU via rproc. (Name not yet finalised)
+- Started writing PRU ``start``, ``stop`` and ``load firmware`` code in c++, tested if it works and pushed to repo under the branch `ai-onboard-testing`. The purpose of this branch isn't exactly to be merged with main branch but to just perform quick small tests on the AI and once proven then subsequently a cleaner and proper code will be written in another branch which can later be merged into the main branch. Currently thinking of making a header file for ``PruManager.h`` which will contains all the functions required to manage the PRU via rproc and UIO both.
+
+- An OOP solutions has been discussed with my mentor on slack and exaplained in detail. I have started writing the PruManager header and source file which implements the existing methods of libprussdrv as well as newer RProc approach all under one roof.
+
+- Implemented and Tested the PruManagerUIO::stop() function in PRU.cpp which was done essentially to test if the code written so far: `PruManager.h`, `PruManager.cpp`, and class PruManagerUIO atleast works, so then the rest of `libprussdrv` functions can be written under it.
+
+- Summary of Weekly Meet with mentor on Monday Jul 5: (refer [slack](https://beagleboard.slack.com/archives/C0SLDS49M/p1625558118175700?thread_ts=1621443657.059500&cid=C0SLDS49M) )
