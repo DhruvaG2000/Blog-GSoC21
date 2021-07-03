@@ -56,7 +56,7 @@ It uses the following libprussdrv functions currently: ([ref1: Ti_AM33XX_PRUSSv2
 7. ``prussdrv_exit()          // Line 1694 ``
 
 ### RProc Implementation in Bela
-* ``RProcBela.h`` is the header file which includes the following classes:
+* ``PruManager.h`` is the header file (currently under development on branch _PRUManager_) which includes the following classes:
     - ``PruManager``: which should expose parameters for the relevant paths.
     - ``PruManagerRprocMmap : public PruManager``: would use rproc for start/stop and mmap for memory sharing 
     - ``PruManagerUio : public PruManager``: is basically a wrapper for libprussdrv for both start/stop and memory sharing,

@@ -7,7 +7,7 @@ sort: 3
 ## On the BeagleBone:
 **Pre-requisites:**
 - Install [Xenomai](https://dhruvag2000.github.io/Blog-GSoC21/xenomai/install.html)
-- Preferrably install the Cape Compatibility Layer](https://dhruvag2000.github.io/Blog-GSoC21/Bela/overlay-instructions.html) if your kernel allows. 
+- Preferrably install the [Cape Compatibility Layer](https://dhruvag2000.github.io/Blog-GSoC21/Bela/overlay-instructions.html) if your kernel allows. 
 - Clone the repo `git clone https://github.com/giuliomoro/Bela-dhruva.git` and then make sure that you are root user and then clone the Bela repo in ``/root/.``
 
 1. **Install am335x PRU package:** Become super user by typing ``sudo -i`` and then ``git clone https://github.com/beagleboard/am335x_pru_package`` and then cd into the cloned directory and then <br>
