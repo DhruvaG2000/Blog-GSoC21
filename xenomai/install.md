@@ -8,7 +8,7 @@ This is a step-by-step guide on how to install the latest working xenomai kernel
 
 1. On any standard release of the IOT debian image for the BeagleBone, you should be able to locate Robert Nelson's Script `update_kernel.sh`. Run the following on your BeagleBone:
 ```sh
-sudo /opt/scripts/tools/update_kernel.sh --ti-xenomai-channel --lts-4_14
+sudo /opt/scripts/tools/update_kernel.sh --ti-xenomai-channel --lts-4_19
 ```
 After this, reboot, and then type in the command 
 ```sh
