@@ -61,8 +61,19 @@ It uses the following libprussdrv functions currently: ([ref1: Ti_AM33XX_PRUSSv2
     - ``PruManagerRprocMmap : public PruManager``: would use rproc for start/stop and mmap for memory sharing 
     - ``PruManagerUio : public PruManager``: is basically a wrapper for libprussdrv for both start/stop and memory sharing,
     - ``PruManagerAi : public PruManagerRprocMmap ``: probably inherit from class ``PruManagerRproc`` and set the appropriate paths
+
 * I will also be adding a `verbose` flag to hide/show my ``cout`` statements. A similar implementation already exists in [I2cCode.cpp](https://github.com/giuliomoro/Bela-dhruva/blob/multi-codec/core/I2c_Codec.cpp#L30). If you are wondering what the commas are, they are just C++ Initialization Lists. **The Initializer List** is used to initialize data members of a class. For further explanation with an example, kindly refer [C++ Initialization Lists](https://en.cppreference.com/w/cpp/language/constructor).
 >  `, i(i)` initializes X::i to the value of the parameter i
+
+* on BBB:
+    - initial state
+    - create a ``PruManager`` abstract class interface (i.e.: with all the methods virtual ... = 0 )
+    - implement the ``PruManagerUio`` class with the _libprussdrv_ calls currently present in the codebase
+    - replace said calls and any data currently stored with a PruManagerUio object
+    - at this point the code is functionally identical to the initial state but it is easier to expand upon because it is more modular
+    - After this, I will implement the ``PruManagerRprocMmap`` class.
+    - all of the above can be in two files:  ``include/PruManager.h`` file and  `core/PruManager.cpp` file (I'll need to add the build/`core/PruManager.o`  object  to `CORE_CORE_OBJS` for `libbela` to work as expected)
+
 
 ### RPROC
 (**I could not really find a suitable rproc header file and hence did not use the functions as they have been described in this section as such. Please refer section RPROC Implementation for the actual implementation in Bela** )
