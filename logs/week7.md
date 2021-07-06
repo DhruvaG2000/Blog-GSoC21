@@ -2,7 +2,7 @@
 sort: 8
 ---
 
-# Week6
+# Week7
 
 ## Logs from July 6 to July 13
 
