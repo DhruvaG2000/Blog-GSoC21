@@ -4,7 +4,7 @@ sort: 7
 
 # Week6
 
-## Logs from June 28 to July 7
+## Logs from June 28 to July 5
 
 - Held weekly meet with mentor where we discussed the following: 
     - As discussed in the proposal, the initial workflow idea was to just compile the PRU firmware binary using clpru main.c . However we realised this may not necessarily work as the output file is generally a .out  file that then needs to be linked with the am57x...fw located in /lib/firmware . So then we looked into the Makefile used in Cloud 9 and realised they were using lnkpru on the binary generated from clpru . However, when we tried that we were facing certain errors that we could not immediately fix during the meet. Hence Giulio will help me debug those using his own AI. 
