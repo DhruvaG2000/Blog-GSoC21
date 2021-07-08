@@ -37,7 +37,7 @@ Extract the suitable version in your home and then you will have to make a fresh
 ```
 ├── build
 │   └── xenomai
-└── xenomai-3.0.10
+└── xenomai-3.1
     ├── aclocal.m4
     ├── config
     ├── configure
@@ -57,7 +57,7 @@ Extract the suitable version in your home and then you will have to make a fresh
 ```
 `cd` into the build/xenomai directory and type in 
 ```sh
-sudo ../../xenomai-3.0.10/configure --enable-smp
+sudo ../../xenomai-3.1/configure --enable-smp
 ```
 `--enable-smp` Turns on SMP support for Xenomai libraries. SMP support must be enabled in Xenomai libraries when the
 client applications are running over a SMP-capable kernel. After this is done, make sure no errors were encountered and then run 
