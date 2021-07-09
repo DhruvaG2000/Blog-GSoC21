@@ -13,3 +13,9 @@ sort: 8
     - [X] `prussdrv_init()` and <br>
     - [X] `prussdrv_open()` under `PruManagerUio::start()`<br> 
     - [X] `prussdrv_pru_disable()` under `PruManagerUio::stop()`<br>
+	- At this point almost the entire prussdrv functions have been shifted to be used (via)prumanager object, and the code can be found on the latest tested and stable branch: [PruManager](https://github.com/giuliomoro/Bela-dhruva/commits/PruManager).
+
+- I also tried _prudebug_ tool. I forked it from [here](https://github.com/giuliomoro/prudebug/tree/master) and made the necessary additions under `pdb` on the [branch bbai](https://github.com/DhruvaG2000/prudebug/blob/bbai). The program compiled fine, and I was also able to drop into the prudebug shell interface, however if I tried any commands like `RESET` or `HALT` then it would throw me out saying `Segmentation fault`. So it seems like it won't be that easy to really port
+  prudebug to the BBAI v4.19-xenomai-r64.
+
+- Tried compiling the BELA Repo on BBB v4.19 xenomai, and succeeded. However the programs won't run probably due to a faulty UIO configuration. Will consult mentor on how to solve this issue.
