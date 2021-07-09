@@ -47,13 +47,13 @@ used to handle audio and SPI ADC/DAC data.
 This code is specific to the PRU code in the assembly file; for example,
 it uses certain GPIO resources that correspond to that image. <br> 
 It uses the following libprussdrv functions currently: ([ref1: Ti_AM33XX_PRUSSv2](https://elinux.org/Ti_AM33XX_PRUSSv2#Host_to_PRU_.28ARM_Cortex-A8_to_PRU.29), [prussdrv.h](https://github.com/beagleboard/am335x_pru_package/blob/master/pru_sw/app_loader/include/prussdrv.h), [prussdrv.c](https://github.com/beagleboard/am335x_pru_package/blob/master/pru_sw/app_loader/interface/prussdrv.c), [examples](https://github.com/beagleboard/am335x_pru_package/tree/master/pru_sw/example_apps) ) 
-1. ``prussdrv_map_prumem()     // Line 101`` 
-2. ``prussdrv_init()           // Line 443`` Initialize the PRU
-3. ``prussdrv_open()          // Line 444``
-4. ``prussdrv_exec_code(int prunum, const unsigned int *code, int codelen)     // Line 864``
-5. ``prussdrv_exec_program()  // Line 874`` Execute example on PRU0 where first argument is the PRU# and second is the assembly to execute
-6. ``prussdrv_pru_disable()   // Line 1686``
-7. ``prussdrv_exit()          // Line 1694 ``
+1. ``prussdrv_map_prumem()     // Line 101``: under `PruManagerUio::map_pru_mem(unsigned int pru_ram_id, char** address)`  
+2. ``prussdrv_init()           // Line 443`` to initialize the PRU and
+3. ``prussdrv_open()          // Line 444`` are now called using `PruManagerUio::start()`
+4. ``prussdrv_exec_code(int prunum, const unsigned int *code, int codelen)     // Line 864`` and
+5. ``prussdrv_exec_program()  // Line 874`` which is to execute any example on PRU0 where first argument is the `PRU#` and second is the `assembly` to execute. These both are now called using `PruManager run` (probably, not fixed yet)
+6. ``prussdrv_pru_disable()   // Line 1686``    replaced with `PruManagerUio::stop()`.
+7. ``prussdrv_exit()          // Line 1694 ``   is now called in the destructor of PruManagerUIO.
 
 ### RProc Implementation in Bela
 * ``PruManager.h`` is the header file (currently under development on branch _PRUManager_) which includes the following classes:
@@ -73,6 +73,37 @@ It uses the following libprussdrv functions currently: ([ref1: Ti_AM33XX_PRUSSv2
     - at this point the code is functionally identical to the initial state but it is easier to expand upon because it is more modular
     - After this, I will implement the ``PruManagerRprocMmap`` class.
     - all of the above can be in two files:  ``include/PruManager.h`` file and  `core/PruManager.cpp` file (I'll need to add the build/`core/PruManager.o`  object  to `CORE_CORE_OBJS` for `libbela` to work as expected)
+
+Here is the rough structure as discussed with mentor:
+
+```C
+void* PruManagerRprocMmap::getOwnMemory()
+{
+       return ownMemory.map(addr, 0x2000);  // addr is full address of the start of the PRU's RAM 
+}
+void* PruManagerRprocMmap::getSharedMemory()
+{
+       return sharedMemory.map(addr2, 0x3000);  // addr2 is the address of the start of PRUSS Shared RAM
+}
+void* PruManagerUio::getOwnMemory()
+{
+       void* pruDataRam;
+       int ret = prussdrv_map_prumem (pru_num == 0 ? PRUSS0_PRU0_DATARAM : PRUSS0_PRU1_DATARAM, (void**)&pruDataRam);
+       if(ret)
+             return NULL;
+       else
+             return pruDataRam;
+}
+void* PruManagerUio::getSharedMemory()
+{
+       void* pruSharedRam;
+       int ret = prussdrv_map_prumem (PRUSS0_SHARED_DATARAM, (void **)&pruSharedRam);
+       if(ret)
+            return NULL;
+       else
+            return pruSharedRam;
+}
+```
 
 
 ### RPROC
