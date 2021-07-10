@@ -50,6 +50,8 @@ where,
 
 ## PRU
 
+Refer the image below to see the IO pins to the PRU in the BeagleBone black (taken from [here](https://beagleboard.org/static/presentations/MakerFaireNY20140920_UsingBeagleBoneRealTimeMicrocontrollers.pdf) ) <br>
+![PRU io pins](photos/PRUio.png) <br>
 [ref1: Rebuilding PRU Firmwares on Target Using Sitara Processors](https://training.ti.com/rebuilding-pru-firmwares-target-using-sitara-processors?context=519066-1138864-1134151)
 The most basic example is given on the homepage where you can learn how to simple start or stop the PRU. Here, we will look at some basic examples in C which can be downloaded from `git clone git://git.ti.com/pru-software-support-package/pru-software-support-package.git`. Let's look at how to run the most basic example that echos whatever we send to the PRU back to us.
 
