@@ -24,4 +24,4 @@ sort: 8
 
 - Fix error "Failed to open /dev/i2c-2 I2C Bus" while trying to run an example on BBAI by changing `codecI2cBus` in `include/bela_hw_settings.h` to i2c4
 
-- Was able to port [prudebug to the BBAI](https://github.com/DhruvaG2000/BeagleBoard-exercises.git). Each individual asm command being executed can be seen step by step now. I have tested this on a basic blink LED code. (However, maybe it is expected, but the LED doesn't do anything when you are in debug mode ie. does not flash when you single step)
+- Was able to port [prudebug to the BBAI](https://github.com/DhruvaG2000/BeagleBoard-exercises/tree/master/pru/prudebug). Each individual asm command being executed can be seen step by step now. I have tested this on a basic blink LED code. (However, maybe it is expected, but the LED doesn't do anything when you are in debug mode ie. does not flash when you single step)
