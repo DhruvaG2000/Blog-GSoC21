@@ -20,7 +20,7 @@ sort: 8
 
 - Tried compiling the BELA Repo on BBB v4.19 xenomai, and succeeded. However the programs won't run probably due to a faulty UIO configuration. Will consult mentor on how to solve this issue.
 
-- Created first edition of Makefile that adapts to the new build procedure for the Bela PRU firmware.
+- Created first edition of [Makefile](https://github.com/giuliomoro/Bela-dhruva/blob/build_pru/tempfolder/Makefile) that adapts to the new build procedure for the Bela PRU firmware.
 
 - Fix error "Failed to open /dev/i2c-2 I2C Bus" while trying to run an example on BBAI by changing `codecI2cBus` in `include/bela_hw_settings.h` to i2c4
 
