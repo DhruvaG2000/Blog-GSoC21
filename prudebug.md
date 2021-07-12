@@ -1,6 +1,6 @@
 # PRU DEBUGGER for BBAI
 
-To view the entire ascii recording, visit the link here: [![asciicast](https://asciinema.org/a/iWYYdN1lhp1fB27fv6ze2DMix.svg)](https://asciinema.org/a/iWYYdN1lhp1fB27fv6ze2DMix)
+Below is the entire ascii recording: [![asciicast](https://asciinema.org/a/iWYYdN1lhp1fB27fv6ze2DMix.svg)](https://asciinema.org/a/iWYYdN1lhp1fB27fv6ze2DMix)
 
 ## Blink LED code
 
@@ -10,7 +10,6 @@ The code below is written in assembly.
 .origin 0
 .entrypoint START
 START:
-HALT
 // set all PRU GPIOs channels to HIGH
 MOV R30, 0xffffffff
 // wait several cycles
@@ -31,7 +30,7 @@ QBA START
 
 ## Prudebug
 
-1. First, load the above assembly code, (to build it you can refer [build_pru.sh](https://gist.github.com/DhruvaG2000/eccbb9ee60c014dafc366555230f326d)
+1. First, load the above assembly code, (to build it you can refer [build_pru.sh](https://gist.github.com/DhruvaG2000/eccbb9ee60c014dafc366555230f326d))
 
 2. To run the prudebugger, execute the command `sudo ./prudebug -m`
 
