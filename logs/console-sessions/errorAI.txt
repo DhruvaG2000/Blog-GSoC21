@@ -1,0 +1,28 @@
+# whenever I try to run an example, even with the BELA + AI cape on:
+
+root@beaglebone:~/Bela-private-dhruva# make PROJECT=sample-streamer run CL=-v AT=
+Automatically detected PROJECT_TYPE: cpp
+Running on __buster__ with Xenomai __3__
+Running on AI1flag
+systemctl stop bela_startup || true
+Failed to stop bela_startup.service: Unit bela_startup.service not loaded.
+PID=`grep bela-audio  /proc/xenomai/sched/stat | cut -d " " -f 5 | sed s/\s//g`; if [ -z $PID ]; then [ false = true ] || echo "No process to kill"; else [  false = true  ] || echo "Killing old Bela process $PID"; kill -2 $PID; sleep 0.2; kill -9 $PID 2> /dev/null; fi; screen -X -S Bela quit > /dev/null; exit 0;
+No process to kill
+killall scsynth 2>/dev/null& killall sclang 2>/dev/null& true
+echo "Running" /root/Bela-private-dhruva/projects/sample-streamer/sample-streamer -v
+Running /root/Bela-private-dhruva/projects/sample-streamer/sample-streamer -v
+sync& cd /root/Bela-private-dhruva/projects/sample-streamer && /root/Bela-private-dhruva/projects/sample-streamer/sample-streamer -v
+Xenomai not explicitly inited
+Xenomai is going to be inited by us
+Bela_initAudio()
+Starting with period size 16 ;analog enabled
+DAC level 99999997952.000000 dB; ADC level 99999997952.000000 dB; headphone level 99999997952.000000 dB
+could not open EEPROM for reading
+Detected hardware: NoHardware
+Hardware specified at the command line: NoHardware
+Hardware specified in the user's belaconfig: NoHardware
+Hardware to be used: NoHardware
+Error: unrecognized Bela hardware. Is a cape connected?
+Error: unable to initialise audio
+make: *** [Makefile:603: runonly] Error 1
+
