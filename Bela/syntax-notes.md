@@ -36,6 +36,8 @@ The following Table compares the Hex addresses of these pins.
 | GPIO1                    	| 0x4804C000  	|              	|                                                                                                             	|   	|
 
 
+The freq of McASP CLK is, as seen from the Logic Analyzer measurement below, 20MHz
+![LA](../logs/console-sessions/IMG_010.BMP)
 
 ## CPP Files
 
