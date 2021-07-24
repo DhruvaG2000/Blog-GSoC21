@@ -14,3 +14,7 @@ sort: 10
 	- When _stopped_ it is 0 : **0x0:** Module is disabled by SW. Any OCP access to module results in an error, except if resulting from a module wakeup (asynchronous wakeup).
 - Mentor also suggested to lookup `devmem2` in `resources/bin`  that I can use to quickly mmap and read or write specific addresses.
 - New LA104 arrived today on 23 Jul 2021. I measured the `McASP AHCLKX` freq and found it to be 20MHz. This confirms what freq we should expect when we are finally testing the Bela examples.
+- Tried using `devmem2` binary as was suggested, and was able to write word to the address `0x4a005550`.
+- Went through the PR comments, and made the following changes:
+	- Pass firmware from Makefile and then build the string programatically for the BBAI.
+	- `start()` was previously using `char* path` as argument which has now been updated to use `std::string` as suggested by mentor.
