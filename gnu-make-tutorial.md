@@ -93,7 +93,25 @@ Last, but not least, when we type in ``make clean`` we clean the working directo
 /proc/device-tree/model
 ```
 
+## Extra Tips
 
+To pass a string from the Makefile to the cpp program, use `g++ hello.cpp -DdhrFlag=\"DHRUVA\" -o argtest`
+where the program `hello.cpp` is:
+```c
+#include <iostream>
+#include <string.h>
+
+using namespace std;
+
+int main() {
+#ifdef dhrFlag
+	string dhr = dhrFlag;
+	cout << dhr;
+#endif
+	cout << "\nHello\n";
+return 0;
+}
+```
 
 ## References
 1. [GNU Make Manual](https://www.gnu.org/software/make/manual/make.html)
