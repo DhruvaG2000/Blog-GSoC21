@@ -18,3 +18,18 @@ sort: 10
 - Went through the PR comments, and made the following changes:
 	- Pass firmware from Makefile and then build the string programatically for the BBAI.
 	- `start()` was previously using `char* path` as argument which has now been updated to use `std::string` as suggested by mentor.
+
+- We may be close to a breakthrough in the project as we are now able to see an _increased intensity signal_ when I run the sinetone example and touch my fingers on the input pins. This means that the codec is generating that data. The only thing (MAJOR thing) that remains now is to debug why there isn't Audio output.
+- The debug procedure I am following is:
+	- Load BBAI-AUDI.. overlay, then
+	- Play some audio file
+	- > use resources/tools/mcasp-dump-tool (after correcting for AI the McASP address it contains and adding McASP register names to the printout) while that audio file is playing in the other terminal
+
+	Observe the output of the above.
+
+	- Compare that with audio allegedly running on BBAI-BELA. (ie. while running the sinetone example without the errors)
+	- compare that also with when you have this
+	```
++#define MCASP_SRCTL_X  MCASP_SRCTL11   // Ser. 11 is transmitter
++#define MCASP_SRCTL_R  MCASP_SRCTL10   // Ser. 10 is receiver
+	```
