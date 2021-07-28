@@ -33,3 +33,8 @@ sort: 10
 +#define MCASP_SRCTL_X  MCASP_SRCTL11   // Ser. 11 is transmitter
 +#define MCASP_SRCTL_R  MCASP_SRCTL10   // Ser. 10 is receiver
 	```
+
+- **BREAKTHROUGH ACHIEVED:** The issue was solved without needing to do the above procedure. I have updated the `git diff`'s and a brief procedure [here](https://gist.github.com/DhruvaG2000/094dd06a010c0aa890a01e636af4ba3c).
+	- Tested `sinetone`, working OK.
+	- Tested `passthrough`, working OK.
+	- **IMPORTANT NOTE** Do a `sudo ./devmem2 0x4A005550 w 0x7000002` before trying anything (as of Jul 28 2021).
