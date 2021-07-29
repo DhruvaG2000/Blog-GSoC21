@@ -25,6 +25,11 @@ For the edits in the code part, kindly visit [this link](https://gist.github.com
 git clone https://github.com/giuliomoro/Bela-dhruva Bela
 ```
 
+- After this, *first and foremost* you will need to use the `devmem2` tool which can be found in [/resources/bin](https://github.com/giuliomoro/Bela-dhruva/tree/ai-testing/resources/bin). This helps configure the clock, without this step things can go _wrong_ later on. (This will soon be done automatically from the PRU code, but till then this will be necessary.)
+```sh
+sudo ./devmem2 0x4A005550 w 0x7000002
+```
+
 - As of 28 July, the pru code was not fully ready with conditional compiling, hence it was shifted temporarily to a branch named `build_pru` inside which you will find a `tempfolder`
 ```sh
 git checkout build_pru
