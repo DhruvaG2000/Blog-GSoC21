@@ -68,3 +68,4 @@ and also be able to hear a sinetone of 440Hz on the AUDIO OUTPUT of the BELA Cap
 
 - run `ldconfig /usr/xenomai/lib/` if you get any `libcobalt` related error
 - Is you get any i2d errors, then I suggest using pull up resistors on the I2C pins. (`P_19` and `9_20`)
+- you may need to revert [this commit](https://github.com/giuliomoro/Bela-dhruva/commit/bf14f5172e25b0f3b1f9fc0b7ef573b8fa9d4786) `git revert bf14f5172e25b0f3b1f9fc0b7ef573b8fa9d4786`
