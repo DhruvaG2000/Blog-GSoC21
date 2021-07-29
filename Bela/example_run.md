@@ -44,6 +44,7 @@ make PROJECT=sinetone CL=-v run BELA_USE_DEFINE=BELA_USE_POLL firmwareBelaRProc=
 ```
 
 - If all goes well, then you should see something like:
+
 ```sh
 Not using McASP->PRU irq
 Stopping the PRU
@@ -52,7 +53,8 @@ Starting the PRU1_1
 _________________Audio Thread!
 
 ```
-	and also be able to hear a sinetone of 440Hz on the AUDIO OUTPUT of the BELA Cape.
+
+and also be able to hear a sinetone of 440Hz on the AUDIO OUTPUT of the BELA Cape.
 
 - To stop, simply do a `ctrl+C`.
 
