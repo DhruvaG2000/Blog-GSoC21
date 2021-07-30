@@ -12,29 +12,21 @@ So for now let's add the lines to the makefile that just detect the bbai and kee
 * [line #L451-L459](https://github.com/giuliomoro/Bela-private-dhruva/blob/bbai-makefile/Makefile#L451-L459): **Rule for Bela core ASM files** 
 * [line #L461-L476](https://github.com/giuliomoro/Bela-private-dhruva/blob/bbai-makefile/Makefile#L461-L476): **PRU asm part** ``pasm -V2 -L -c -b "$<"``. 
 
-As discussed, I have to make the following changes here: 
-Try with gcc, or else use the _clpru toolchain_.  
+As discussed, I have to made the following changes here:
+use the _clpru toolchain_.
 
 Also, add the disasm prudis to makefile as follows: ``prudis file.bin | sed 's/^\(.*\)$/" \1\\n"/' > included_assembly.h``
 
 ## Asm files
 
-**pru_rtaudio.p** 
+**pru_rtaudio.p**
 - If I replace the older addresses with the one’s for BBAi, will that not break BBB compatibility? How can we tackle this issue? <br>
 _soln:_ you can use #ifdef to make them conditional at compile time. The Makefile could detect whether we are running on an AM335x or an AM572x and define a flag accordingly. This same flag can be used for conditional compilation of the libprussdrv vs rproc stuff in core/PRU.cpp. This could be the initial approach because it’s faster to get it done. Later in the project, we could move to a runtime flag if appropriate by passing a flag to the PRU at runtime for whether we are on am335x or am527x
 and allow it to select the relevant addresses at runtime. [source](https://forum.beagleboard.org/t/bela-support-for-bbai-later-ti-chips/29257/6)
 
 - We are using only MCASP1 on the BBAI, so you don’t really need MCASP2. Also, the define for MCASP1 on the AM335x is not needed, because we never use that. <br>
-The MCSPI and GPIO addresses will also need to change between the two boards. 
-The following Table compares the Hex addresses of these pins. 
-
-| Pin name/ <br>Definition 	| BBB<br>Addr 	| BBAI<br>Addr 	| Comments/notes                                                                                              	|   	|
-|--------------------------	|-------------	|--------------	|-------------------------------------------------------------------------------------------------------------	|---	|
-| McASP0 CFG               	| 0x4803_C000 	| 0x4846_4000  	| most of following BBB offsets are same, so mostly changing the base address only should suffice.            	|   	|
-| McSPI                    	|             	|              	| Didn't find where McSPI are used in the asm files, so didn't look it up for now                             	|   	|
-| GPIO0                    	| 0x44E07000  	|              	| see [#L43-L49](https://github.com/giuliomoro/Bela-private-dhruva/blob/bbai-mcasp/pru/pru_rtaudio.p#L43-L49) 	|   	|
-| GPIO1                    	| 0x4804C000  	|              	|                                                                                                             	|   	|
-
+The MCSPI and GPIO addresses will also need to change between the two boards.
+The following Table compares the Hex addresses of these pins.
 
 The freq of McASP CLK is, as seen from the Logic Analyzer measurement below, 20MHz
 ![LA](../logs/console-sessions/IMG_010.BMP)
@@ -77,7 +69,7 @@ It uses the following libprussdrv functions currently: ([ref1: Ti_AM33XX_PRUSSv2
     - all of the above can be in two files:  ``include/PruManager.h`` file and  `core/PruManager.cpp` file (I'll need to add the build/`core/PruManager.o`  object  to `CORE_CORE_OBJS` for `libbela` to work as expected)
 
 Here is the rough structure as discussed with mentor:
-
+(Please refer the actual repo for latest status)
 ```C
 void* PruManagerRprocMmap::getOwnMemory()
 {
@@ -107,25 +99,32 @@ void* PruManagerUio::getSharedMemory()
 }
 ```
 
+**GPIO.cpp**
+
+The general-purpose interface combines four general-purpose input/output (GPIO) modules. Each GPIO
+module provides 32 dedicated general-purpose pins with input and output capabilities; thus, the general-
+purpose interface supports up to 128 (4 × 32) pins. These pins can be configured for the following
+applications:
+• Data input (capture)/output (drive)
+• Keyboard interface with a debounce cell
+• Interrupt generation in active mode upon the detection of external events. Detected events are
+processed by two parallel independent interrupt-generation submodules to support biprocessor
+operations.
+• Wake-up request generation in idle mode upon the detection of external events.
+
+- Refer [Gpio.cpp](https://github.com/giuliomoro/Bela-dhruva/blob/multi-codec/core/Gpio.cpp#L36-L37):
+
+```c
+bank = num / 32
+bit = num % 32
+```
+So,
+if one is to apply the formula it would be like for eg.
+`GPIO 125` which is  Bela button on `P9_27`
+_GPIO bank_ = `(int)125/32`  = __GPIO3__
+_bit_ = `125%32` = `29`
 
 ### RPROC
 (**I could not really find a suitable rproc header file and hence did not use the functions as they have been described in this section as such. Please refer section RPROC Implementation for the actual implementation in Bela** )
-Before we start discussing the cpp files, let's have a brief overview of the User API of rproc, and we will mainly go through the functions specific to our application. ([ref1: rproc](https://www.kernel.org/doc/html/latest/staging/remoteproc.html), [ref2: rpmsg](https://www.kernel.org/doc/html/latest/staging/rpmsg.html), [ref3: linux docs](https://docs.huihoo.com/doxygen/linux/kernel/3.7/remoteproc_8h.html)) 
+Before we start discussing the cpp files, let's have a brief overview of the User API of rproc, and we will mainly go through the functions specific to our application. ([ref1: rproc](https://www.kernel.org/doc/html/latest/staging/remoteproc.html), [ref2: rpmsg](https://www.kernel.org/doc/html/latest/staging/rpmsg.html), [ref3: linux docs](https://docs.huihoo.com/doxygen/linux/kernel/3.7/remoteproc_8h.html))
 
-1. TODO
-2. - ``int rproc_boot(struct rproc *rproc)`` // Boot a remote processor (i.e. load its firmware, power it on, …).
-If the remote processor is already powered on, this function immediately returns (successfully). It returns 0 on success, and an appropriate error value otherwise. Note: to use this function you should already have a valid rproc handle. There are several ways to achieve that cleanly (devres, pdata, the way remoteproc_rpmsg.c does this
-
-    - ``int rproc_add(struct rproc *rproc)`` // Register @ rproc with the remoteproc framework, after it has been allocated with rproc_alloc().
-This is called by the platform-specific rproc implementation, whenever a new remote processor device is probed.
-
-3. todo
-
-4. todo
-
-5. todo
-
-6. todo
-
-7. ``void rproc_shutdown(struct rproc *rproc)`` // Power off a remote processor (previously booted with rproc_boot()). In case @ rproc is still being used by an additional user(s), then this function will just decrement the power refcount and exit, without really powering off the device.
-Every call to rproc_boot() must (eventually) be accompanied by a call to rproc_shutdown(). Calling rproc_shutdown() redundantly is a bug.
