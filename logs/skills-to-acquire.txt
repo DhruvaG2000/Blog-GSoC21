@@ -1,11 +1,17 @@
 # This file is a check-list of all the skills I need during this summer.
 
-* Software (mostly in C/C++): 
-    - [ ] STL (incl vectors, set, etc.) 
-    - [ ] Preprocessor macros
+* Software (mostly in C/C++):
+    - [X] STL (incl vectors, set, etc.)
+    - [X] Preprocessor macros
     - [ ] assembling a asm program using gcc
-    - [ ] including __ASM__ directive in a program
+    - [X] including __ASM__ directive in a program
     - [ ] RTOS in ESP-IDF
 
 * Hardware:
     - [ ] KiCAD (by completing the RP2040-DEV-board)
+
+* Things to do:
+- SPI (change base address)
+- GPIO (change base addresses and pin mappings)
+- McASP->PRU IRQs. These were mapped abusing the rtdm_pruss_irq driver, but should probably be done via rproc now. This would allow to support the pru_rtaudio_irq.p code, which is used by other capes (CTAG etc)
+- PRU->ARM IRQs. This is what the rtdm_pruss_irq was initially designed for. Ideally we'd just port the driver over, this may require looking in more detail at the interrupt controller. This would allow to remove the BELA_USE_POLL from make and reduce CPU consumption.

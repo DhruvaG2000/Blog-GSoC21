@@ -17,6 +17,7 @@ For the edits in the code part, kindly visit [this link](https://gist.github.com
 - Build, Install and load the BELA Cape overlay from [here](https://github.com/DhruvaG2000/BeagleBoard-DeviceTrees/blob/v4.19.x-ti-overlays/src/arm/overlays/BBAI-BELA-00A1.dts) and for instructions [follow this](https://dhruvag2000.github.io/Blog-GSoC21/Bela/overlay-instructions.html), just that instead of the AUDI overlay, you will be using the BELA overlay.
 - It is assumed that you have `prudis` installed on your system from [here](https://github.com/giuliomoro/prudebug/tree/master).
 - The [am335x_pru_package](https://github.com/beagleboard/am335x_pru_package) may also need to be installed on your BBAI.
+- Highly recommend following this [Bela source-compile walkthrough](https://dhruvag2000.github.io/Blog-GSoC21/Bela/source-compile.html) first to make sure there won't be major dependency issues later on.
 
 ## Instructions
 
