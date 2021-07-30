@@ -4,13 +4,13 @@ sort: 1
 
 # Installing Xenomai Kernel and Libraries
 
-This is a step-by-step guide on how to install the latest working xenomai kernel on your BeagleBone device and after that, how to download and use the xenomai libraries for your project. 
+This is a step-by-step guide on how to install the latest working xenomai kernel on your BeagleBone device and after that, how to download and use the xenomai libraries for your project.
 
 1. On any standard release of the IOT debian image for the BeagleBone, you should be able to locate Robert Nelson's Script `update_kernel.sh`. Run the following on your BeagleBone:
 ```sh
 sudo /opt/scripts/tools/update_kernel.sh --ti-xenomai-channel --lts-4_19
 ```
-After this, reboot, and then type in the command 
+After this, reboot, and then type in the command
 ```sh
 uname -a
 ```
@@ -18,7 +18,7 @@ In my case, the output was
 ```sh
 Linux beaglebone 4.19.94-ti-xenomai-r64
 ```
-Now you only really need to note the _4.19.94-ti-xenomai-r64_ part of the output, this confirms that you are now running a Xenomai Patched Kernel on your device, and can move on to the proceeding steps. 
+Now you only really need to note the _4.19.94-ti-xenomai-r64_ part of the output, this confirms that you are now running a Xenomai Patched Kernel on your device, and can move on to the proceeding steps.
 
 2. Now in your terminal, paste ```dmesg | grep -i xenomai``` and observe the output. In my case, this was
 ```sh
@@ -33,7 +33,7 @@ Now you only really need to note the _4.19.94-ti-xenomai-r64_ part of the output
 Here, note the line `[    1.110019] [Xenomai] Cobalt v3.1`. This step is very important, as if there's any version mis-match then you will face issues later.
 
 3. Now head over to [stable release tarballs](https://xenomai.org/downloads/xenomai/stable/) and download the version that matches the Cobalt version we saw above. [xenomai-3.1](https://xenomai.org/downloads/xenomai/stable/xenomai-3.1.tar.bz2) worked for me.
-Extract the suitable version in your home and then you will have to make a fresh clean build directory. Your overall tree should look something like this: 
+Extract the suitable version in your home and then you will have to make a fresh clean build directory. Your overall tree should look something like this:
 ```
 ├── build
 │   └── xenomai
@@ -55,16 +55,16 @@ Extract the suitable version in your home and then you will have to make a fresh
     ├── testsuite
     └── utils
 ```
-`cd` into the build/xenomai directory and type in 
+`cd` into the build/xenomai directory and type in
 ```sh
-sudo ../../xenomai-3.1/configure --enable-smp
+../../xenomai-3.1/configure --enable-smp
 ```
 `--enable-smp` Turns on SMP support for Xenomai libraries. SMP support must be enabled in Xenomai libraries when the
 client applications are running over a SMP-capable kernel. After this is done, make sure no errors were encountered and then run 
 ```sh
-sudo make install
+make && sudo make install
 ```
-It will take some time for it to compile everything and once it's done reboot your device. 
+It will take some time for it to compile everything and once it's done reboot your device.
 
 4. Testing your installation: <br>
 Run `sudo /usr/xenomai/bin/latency` and if you get an output similar to this:
@@ -81,8 +81,12 @@ RTD|      4.374|      5.142|     31.166|       0|     0|      4.374|     49.833
 ^C---|-----------|-----------|-----------|--------|------|-------------------------
 RTS|      4.374|      6.187|     49.833|       0|     0|    00:00:04/00:00:04
 ```
-then Congrats! You have successfully installed the Xenomai libraries and Kernel on your BeagleBone! 
+then Congrats! You have successfully installed the Xenomai libraries and Kernel on your BeagleBone!
 
-## References 
+## References
 
 1. [Xenomai Wiki](https://source.denx.de/Xenomai/xenomai/-/wikis/Installing_Xenomai_3#library-install)
+
+## Contingencies
+
+- It is possible that your BBAI may not boot after upgrading to xenomai kernel, try to access the boot logs via UART, and monitor them closely, also try to *RESET* and not `power off - power on` neither reboot the board.
