@@ -26,19 +26,21 @@ For the edits in the code part, kindly visit [this link](https://gist.github.com
 git clone https://github.com/giuliomoro/Bela-dhruva Bela
 ```
 
-- After this, *first and foremost* you will need to use the `devmem2` tool which can be found in [/resources/bin](https://github.com/giuliomoro/Bela-dhruva/tree/ai-testing/resources/bin). This helps configure the clock, without this step things can go _wrong_ later on. (This will soon be done automatically from the PRU code, but till then this will be necessary.)
+- Switch to the `BBAI-support` using `git checkout BBAI-support` inside the repo you just cloned.
+
+- (Not needed anymore, this has been taken care of in PRU code) After this, *first and foremost* you will need to use the `devmem2` tool which can be found in [/resources/bin](https://github.com/giuliomoro/Bela-dhruva/tree/ai-testing/resources/bin). This helps configure the clock, without this step things can go _wrong_ later on. (This will soon be done automatically from the PRU code, but till then this will be necessary.)
 ```sh
 sudo ./devmem2 0x4A005550 w 0x7000002
 ```
 
-- As of 28 July, the pru code was not fully ready with conditional compiling, hence it was shifted temporarily to a branch named `build_pru` inside which you will find a `tempfolder`
+- (Not needed anymore, this has been taken care of in PRU code)
 ```sh
 git checkout build_pru
 ```
-- Now copy this tempfolder where you want outside the Bela repo and then navigate into it. <br>
+- (Not needed anymore, this has been taken care of in PRU code)Now copy this tempfolder where you want outside the Bela repo and then navigate into it. <br>
 Now, follow the [README from here](https://github.com/giuliomoro/Bela-dhruva/tree/build_pru/tempfolder#readme) which you will also find inside the tempfolder.
 
-- Once the PRU code is built, then you can come back to the Bela repo you had cloned earlier. <br>
+- (Not needed anymore, this has been taken care of in PRU code)Once the PRU code is built, then you can come back to the Bela repo you had cloned earlier. <br>
 Now, switch to the `ai-testing` branch using
 ```sh
 git checkout ai-testing
@@ -46,21 +48,21 @@ git checkout ai-testing
 
 - Finally, you should create a `projects` folder in `/root/Bela/.` and then copy your choice of example (here I show sinetone) to it. Then, use the command below to build and run the example.
 ```sh
-make PROJECT=sinetone CL=-v run BELA_USE_DEFINE=BELA_USE_POLL firmwareBelaRProc=/home/debian/Bela-dhruva/tempfolder/template.pru1_1.out
+make PROJECT=sinetone CL=-v run BELA_USE_DEFINE=BELA_USE_POLL
 ```
 
 - If all goes well, then you should see something like:
 
 ```sh
 Not using McASP->PRU irq
-Stopping the PRU
-Loading firmware into the PRU1_1
-Starting the PRU1_1
+Using Non-McASP IRQ embedded PRU firmware
+Stopping PRU1_1
+Loading firmware into PRU1_1: /lib/firmware/am57xx-pru1_1-fw symlinked from /root/testBela/build/pru/pru_rtaudio.out
+Starting PRU1_1
 _________________Audio Thread!
-
 ```
 
-and also be able to hear a sinetone of 440Hz on the AUDIO OUTPUT of the BELA Cape.
+and also be able to hear a sinetone of 440Hz frequency on the AUDIO OUTPUT of the BELA Cape.
 
 - To stop, simply do a `ctrl+C`.
 
