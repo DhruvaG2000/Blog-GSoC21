@@ -10,3 +10,5 @@ sort: 11
 - Replaced std::map to std::vector approach in PruManager RProc + Mmap part.
 - accumulated all the files necessary for the PRU code compilation in one place on the PruManager branch.
 - tested the PruManager branch with all the new changes and verified that it works
+- Got GPIO working on BBAI + BELA
+- Almost got SPI working, small issue faced was that the MOSI and MISO seem to be swapped in the BBB vs BBAI. Have to make those changes in the overlay and also the pru code.
