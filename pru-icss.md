@@ -40,18 +40,20 @@ interrupt number, the higher the priority.
 The next stage of `PRUSS_INTC` is to enable system interrupts based on programmed settings. The
 following sequence is to be followed to enable interrupts:
 - Enable required system interrupts: The System Interrupt Enable Indexed Set Register allows enabling an interrupt. The interrupt to enable is the index value written. This sets the Enable Register bit of the given index.
-Physical Address:
-0x4B22 0028 | `PRUSS1_INTC`
-0x4B2A 0028 | `PRUSS2_INTC`
+<br>
+Physical Address: <br>
+0x4B22 0028 | `PRUSS1_INTC` <br>
+0x4B2A 0028 | `PRUSS2_INTC` <br>
 
 - Enable required host interrupts: By writing 1 to the appropriate bit of the INDEX field in the host
 interrupt enable indexed set register (`PRUSS_INTC_HIEISR`), enable the required host interrupts. The
 host interrupt to enable is the index value written. This enables the host interrupt output or triggers the
 output again if that host interrupt is already enabled.
 *ref. Table 30-231. PRUSS_INTC_HIEISR*
-Physical Address:
-0x4B22 0034 | `PRUSS1_INTC`
-0x4B2A 0034 | `PRUSS2_INTC`
+<br>
+Physical Address:<br>
+0x4B22 0034 | `PRUSS1_INTC` <br>
+0x4B2A 0034 | `PRUSS2_INTC` <br>
 
 - Enable all host interrupts: By setting the ENABLE bit in the global enable register (`PRUSS_INTC_GER`) to 1, all host interrupts will be enabled. Individual host interrupts are still _enabled_ or _disabled_ from their individual enables and are not overridden by the global enable. (we probably do not need this)
 
