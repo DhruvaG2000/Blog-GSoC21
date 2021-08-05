@@ -72,7 +72,13 @@ Follow these steps to configure the interrupt controller.
 - Globally enable all interrupts through register `PRUSS_INTC_GER[0] ENABLE_HINT_ANY` bit.
 
 ## Routing McASP0 interrupts to PRU INTC
-
+Let's take `PRUSS_INTC_CMR0 and 1`. As per _Table 30-781_ `PRUSS_INTC_CMRi` the physical addresses will be:
+<br>
+0x4B22 0400 + 0 --> for `...CMR_0` <br>
+0x4B2A 0400 + 4 = 0x4B2A0404 --> `...CMR_1` <br>
+and then we have to set the bits according to this table:
+![](photos/PRUSS_INTC_CMRi.png)
+Here, we will set the bits 3:0 ie. `CH_MAP_0` 
 
 ## Common Terms used <a name="comterms"></a>
 - *PRU-ICSS:* Programmable Real-Time Unit Subsystem and Industrial Communication Subsystem.
@@ -80,3 +86,7 @@ Follow these steps to configure the interrupt controller.
 
 ## References
 1. [TI Forum: am3359-routing-mcasp0-interrupts-to-pru-intc](https://e2e.ti.com/support/processors-group/processors/f/processors-forum/598002/am3359-routing-mcasp0-interrupts-to-pru-intc)
+
+
+## Misc.
+![](photos/mcasp-crossbar.png)
