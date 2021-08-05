@@ -22,18 +22,52 @@ The `PRUSS_INTC` has the following features:
 **30.1.6.2 PRU-ICSS Interrupt Controller Functional Description**
 The PRU-ICSS incorporates an interrupt controller - `PRUSS_INTC` that supports up to _64_ system interrupts from different peripherals (including 32 interrupts from PRU-ICSS located interrupt sources). The `PRUSS_INTC` maps these system events to _10 channels inside_ the `PRUSS_INTC` (see Figure). <br>
 Interrupts from these 10 channels are further mapped to 10 Host Interrupts.
-• Any of the 64 system interrupts can be mapped to any of the 10 channels.
-• Multiple interrupts can be mapped to a single channel.
-• An interrupt should not be mapped to more than one channel.
-• Any of the 10 channels can be mapped to any of the 10 host interrupts. It is recommended to map
+
+- Any of the 64 system interrupts can be mapped to any of the 10 channels.
+- Multiple interrupts can be mapped to a single channel.
+- An interrupt should not be mapped to more than one channel.
+- Any of the 10 channels can be mapped to any of the 10 host interrupts. It is recommended to map
 channel “x” to host interrupt “x”, where x is from 0 to 9
-• A channel should not be mapped to more than one host interrupt
-• For channels mapping to the same host interrupt, lower number channels have higher priority.
-• For interrupts on same channel, priority is determined by the hardware interrupt number. The lower the
+- A channel should not be mapped to more than one host interrupt
+- For channels mapping to the same host interrupt, lower number channels have higher priority.
+- For interrupts on same channel, priority is determined by the hardware interrupt number. The lower the
 interrupt number, the higher the priority.
-• Host Interrupt 0 is connected to bit 30 in register 31 (R31) of PRU0 and PRU1.
-• Host Interrupt 1 is connected to bit 31 in register 31 (R31) for PRU0 and PRU1.
-• Host Interrupts 2 through 9 exported from PRU-ICSS and mapped to interrupt controllers in the device.
+- Host Interrupt 0 is connected to bit 30 in register 31 (R31) of PRU0 and PRU1.
+- Host Interrupt 1 is connected to bit 31 in register 31 (R31) for PRU0 and PRU1.
+- Host Interrupts 2 through 9 exported from PRU-ICSS and mapped to interrupt controllers in the device.
+
+## 30.1.6.2.2.1.1 PRU-ICSS Interrupt Enabling
+The next stage of `PRUSS_INTC` is to enable system interrupts based on programmed settings. The
+following sequence is to be followed to enable interrupts:
+- Enable required system interrupts: The System Interrupt Enable Indexed Set Register allows enabling an interrupt. The interrupt to enable is the index value written. This sets the Enable Register bit of the given index.
+Physical Address:
+0x4B22 0028 | `PRUSS1_INTC`
+0x4B2A 0028 | `PRUSS2_INTC`
+
+- Enable required host interrupts: By writing 1 to the appropriate bit of the INDEX field in the host
+interrupt enable indexed set register (`PRUSS_INTC_HIEISR`), enable the required host interrupts. The
+host interrupt to enable is the index value written. This enables the host interrupt output or triggers the
+output again if that host interrupt is already enabled.
+*ref. Table 30-231. PRUSS_INTC_HIEISR*
+Physical Address:
+0x4B22 0034 | `PRUSS1_INTC`
+0x4B2A 0034 | `PRUSS2_INTC`
+
+- Enable all host interrupts: By setting the ENABLE bit in the global enable register (`PRUSS_INTC_GER`) to 1, all host interrupts will be enabled. Individual host interrupts are still _enabled_ or _disabled_ from their individual enables and are not overridden by the global enable. (we probably do not need this)
+
+*Note:* Checkout _30.2.6.2.2.2 PRU-ICSS Interrupt Status Checking_ of AM57xx Manual, just to be sure that the BELA PRU code is using the right register locations to check the interrupt statuses.
+
+## 30.2.6.3 PRU-ICSS Interrupt Controller Basic Programming Model
+Follow these steps to configure the interrupt controller.
+<br>
+- Set polarity and type of system event through the System Interrupt Polarity Registers (`PRUSS_INTC_SIPR1` and `PRUSS_INTC_SIPR0`) and the System Interrupt Type Registers (`PRUSS_INTC_SITR1` and `PRUSS_INTC_SITR0`). Polarity of all system interrupts is always high. Type of all system interrupts is always pulse.
+
+- Map system event to `PRUSS_INTC` channel through `PRUSS_INTC_CMRi` (_i=0 to 15_) channel mapping registers.
+- Map channel to host interrupt through `PRUSS_INTC_HMR0/1/2` registers. Recommended channel “x” to be mapped to host interrupt “x”.
+- Clear system interrupt by writing _1_ to `PRUSS_INTC_SECR0/1` registers.
+- Enable host interrupt by writing index value to `PRUSS_INTC_HIEISR` register.
+- Enable interrupt nesting if desired.
+- Globally enable all interrupts through register `PRUSS_INTC_GER[0] ENABLE_HINT_ANY` bit.
 
 ## Routing McASP0 interrupts to PRU INTC
 
