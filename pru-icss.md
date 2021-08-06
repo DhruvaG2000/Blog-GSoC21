@@ -44,6 +44,12 @@ following sequence is to be followed to enable interrupts:
 Physical Address: <br>
 0x4B22 0028 | `PRUSS1_INTC` <br>
 0x4B2A 0028 | `PRUSS2_INTC` <br>
+**Table 30-741. PRUSS1_INTC Registers Mapping Summary**
+
+0x4B22 0284 | `PRUSS1_INTC Base addr` <br>
+0x4B2A 0284 | `PRUSS2_INTC` <br>
+
+**Table 30-771. `PRUSS_INTC_SECR1`** talks in detail about the same.
 
 - Enable required host interrupts: By writing 1 to the appropriate bit of the INDEX field in the host
 interrupt enable indexed set register (`PRUSS_INTC_HIEISR`), enable the required host interrupts. The
@@ -80,6 +86,9 @@ and then we have to set the bits according to this table:
 ![](photos/PRUSS_INTC_CMRi.png)
 Here, we will set the bits 3:0 ie. `CH_MAP_0` 
 
+pg 6076:
+> `MCASPi_IRQ_AREVT` can be also generated if the `RDATA` interrupt is enabled in the `MCASP_EVTCTLR` register (for details, see Section 24.6.4.12.1, Receive Data Ready Interrupt).
+
 ## Common Terms used <a name="comterms"></a>
 - *PRU-ICSS:* Programmable Real-Time Unit Subsystem and Industrial Communication Subsystem.
 - *Arm interrupts:* [Refer this tutorial](https://www.electronicshub.org/arm-interrupt-tutorial/)
@@ -90,3 +99,5 @@ Here, we will set the bits 3:0 ie. `CH_MAP_0`
 
 ## Misc.
 ![](photos/mcasp-crossbar.png)
+
+pg4163
