@@ -92,13 +92,18 @@ Here, we will set the bits 3:0 ie. `CH_MAP_0`
 pg 6076:
 > `MCASPi_IRQ_AREVT` can be also generated if the `RDATA` interrupt is enabled in the `MCASP_EVTCTLR` register (for details, see Section 24.6.4.12.1, Receive Data Ready Interrupt).
 
+*From table 17-11. PRUSS1_INTC Default Interrupt Mapping (continued)*
+Let's use the `PRUSS1_IRQ_38` which is `Reserved by default but can be remapped to a
+valid interrupt source` and also `PRUSS1_IRQ_39`. 
+
 ## Common Terms used <a name="comterms"></a>
 - *PRU-ICSS:* Programmable Real-Time Unit Subsystem and Industrial Communication Subsystem.
 - *Arm interrupts:* [Refer this tutorial](https://www.electronicshub.org/arm-interrupt-tutorial/)
 
 ## References
 1. [TI Forum: am3359-routing-mcasp0-interrupts-to-pru-intc](https://e2e.ti.com/support/processors-group/processors/f/processors-forum/598002/am3359-routing-mcasp0-interrupts-to-pru-intc)
-
+2. [TI-forum: gpio crossbar settings](https://e2e.ti.com/support/processors-group/processors/f/processors-forum/504356/notify-overwrites-gpio-crossbar-setting)
+3. [mail-archive: Using irq-crossbar.c](https://www.mail-archive.com/search?l=linux-kernel@vger.kernel.org&q=subject:%22Re%5C%3A+Using+irq%5C-crossbar.c%22&o=newest&f=1)
 
 ## Misc.
 ![](photos/mcasp-crossbar.png)
