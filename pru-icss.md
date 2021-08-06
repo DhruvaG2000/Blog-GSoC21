@@ -42,8 +42,10 @@ following sequence is to be followed to enable interrupts:
 - Enable required system interrupts: The System Interrupt Enable Indexed Set Register allows enabling an interrupt. The interrupt to enable is the index value written. This sets the Enable Register bit of the given index.
 <br>
 Physical Address: <br>
+
 0x4B22 0028 | `PRUSS1_INTC` <br>
 0x4B2A 0028 | `PRUSS2_INTC` <br>
+
 **Table 30-741. PRUSS1_INTC Registers Mapping Summary**
 
 0x4B22 0284 | `PRUSS1_INTC Base addr` <br>
@@ -58,6 +60,7 @@ output again if that host interrupt is already enabled.
 *ref. Table 30-231. PRUSS_INTC_HIEISR*
 <br>
 Physical Address:<br>
+
 0x4B22 0034 | `PRUSS1_INTC` <br>
 0x4B2A 0034 | `PRUSS2_INTC` <br>
 
