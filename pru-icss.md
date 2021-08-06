@@ -94,7 +94,11 @@ pg 6076:
 
 *From table 17-11. PRUSS1_INTC Default Interrupt Mapping (continued)*
 Let's use the `PRUSS1_IRQ_38` which is `Reserved by default but can be remapped to a
-valid interrupt source` and also `PRUSS1_IRQ_39`. 
+valid interrupt source` and also `PRUSS1_IRQ_39`. From pg 43821 Table 18-553,
+<br>
+*Addr offset:* `0x0000 08D4`
+*Physical Address:* `0x4A00 28D4`
+![`CTRL_CORE_PRUSS1_IRQ_38_39`](photos/CTRL_CORE_PRUSS1_IRQ_38_39.png)
 
 ## Common Terms used <a name="comterms"></a>
 - *PRU-ICSS:* Programmable Real-Time Unit Subsystem and Industrial Communication Subsystem.
