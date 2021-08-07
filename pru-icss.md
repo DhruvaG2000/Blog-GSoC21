@@ -132,7 +132,12 @@ and to understand system interrupt, referring to
 
 which means that we need to write `0x26` and `0x27` to `0x4B22 0028` inorder to enable those two interrupts one by one.
 
-- 
+- It is pobably worth reading the "The next stage is to capture which system interrupts are pending." part, which I am not sure, but think it has been done already in the BELA Pru irq code.
+
+- Now, we come to `PRUSS_INTC_CMRi` registers located at `0x4B22N 0400 + 0X4*i`, where i in our case will be channel i=1. <br>
+So, we want the system interrupt `0x26 and 27` to be mapped to channel 1 which when divided by 4 means that we write the value of k as `0x9` to the bits `11:8` ie. `CH_MAP_1`.
+
+- Now that we have mapped the right McASP interrupts to channel 1, which is what the existing BELA PRU IRQ Code checks for already, I think so that the above described workflow should be enough.
 
 ## Common Terms used <a name="comterms"></a>
 - *PRU-ICSS:* Programmable Real-Time Unit Subsystem and Industrial Communication Subsystem.
