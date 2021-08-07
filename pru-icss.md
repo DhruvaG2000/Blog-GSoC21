@@ -108,6 +108,14 @@ There are IRQs which are not mapped by default to any interrupt line of any devi
 The individual connection between all module IRQs and all `IRQ_CROSSBAR` inputs is shown in _Section 17.3.12_ (**Which we have already observed and the image is pasted down below, where we can see corssbar --> MCASP**), Mapping of Device Interrupts to `IRQ_CROSSBAR` Inputs of _Chapter 17_, Interrupt Controllers. <br>
 In addition, the `CTRL_CORE_OVS_IRQ_IO_MUX` register is used to select for observation on two external pads any IRQ connected to the `IRQ_CROSSBAR` inputs. Using the `CTRL_CORE_OVS_IRQ_IO_MUX[17:9]` `OVS_IRQ_IO_MUX_2` bit field all IRQs can be mapped to the  `obs_irq2` signal. The `CTRL_CORE_OVS_IRQ_IO_MUX[8:0] OVS_IRQ_IO_MUX_1` bit field maps all IRQs to the `obs_irq1` signal. For example, setting the `CTRL_CORE_OVS_IRQ_IO_MUX[8:0] OVS_IRQ_IO_MUX_1 to 0x18` maps the `GPIO1_IRQ_1 to the obs_irq1` line and thus this IRQ can be observed.
 
+So, infering from what has been said above, we will try to do the following:
+
+- We know, that `CTRL_CORE_OVS_IRQ_IO_MUX` is at `0x4A00 2D50` location.
+- It has `OVS_IRQ_IO_MUX_1` at bits _8:0_ <br> and `2` at bits _17:9_ .
+- McASP rx is `IRQ_CROSSBAR_103` which is in hex `0x67` <br> and MCASP tx is `IRQ_CROSSBAR_104` ie. `0x68`.
+- for testing purposes, we can use the `devmem2` tool to try and set these in the required bits. (**note:** a word is 16 bits)
+- after these bits are set, we can make use of the `CTRL_CORE_X_IRQ_B_A` registers.
+
 ## Common Terms used <a name="comterms"></a>
 - *PRU-ICSS:* Programmable Real-Time Unit Subsystem and Industrial Communication Subsystem.
 - *Arm interrupts:* [Refer this tutorial](https://www.electronicshub.org/arm-interrupt-tutorial/)
@@ -123,3 +131,5 @@ In addition, the `CTRL_CORE_OVS_IRQ_IO_MUX` register is used to select for obser
 ![](photos/mcasp-crossbar.png)
 
 pg4163
+
+CTRL_CORE_PRUSS1_IRQ_32_33 RW 32 0x0000 08C8 0x4A00 28C8
