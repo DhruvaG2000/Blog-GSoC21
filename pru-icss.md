@@ -113,8 +113,12 @@ So, infering from what has been said above, we will try to do the following:
 - We know, that `CTRL_CORE_OVS_IRQ_IO_MUX` is at `0x4A00 2D50` location.
 - It has `OVS_IRQ_IO_MUX_1` at bits _8:0_ <br> and `2` at bits _17:9_ .
 - McASP rx is `IRQ_CROSSBAR_103` which is in hex `0x67` <br> and MCASP tx is `IRQ_CROSSBAR_104` ie. `0x68`.
-- for testing purposes, we can use the `devmem2` tool to try and set these in the required bits. (**note:** a word is 16 bits)
-- after these bits are set, we can make use of the `CTRL_CORE_X_IRQ_B_A` registers.
+- for testing purposes, we can use the `devmem2` tool to try and set these in the required bits. (**note:** a word is 16 bits). Once that's done we expect to to have the bit fields mapped to `obs_irq1` and `obs_irq2` respectively.
+- after these bits are set, we can make use of the `CTRL_CORE_X_IRQ_B_A` registers, specifically `CTRL_CORE_PRUSS1_IRQ_38_39` and set the bits _8:0_ ie. `PRUSS1_IRQ_38` and _24:16_ ie. `PRUSS1_IRQ_39` to `0x67` and `0x68` respectively.
+- once this is done, we have a look at
+> The MII_RT Event Enable Register enables MII_RT mode events to the PRUSS.PRUSS_INTC.
+
+ie. the `PRUSS_MII_RT` register at address `0x4B22 602C`. (**Note** `MII_RT_EVENT_EN`=0b1).
 
 ## Common Terms used <a name="comterms"></a>
 - *PRU-ICSS:* Programmable Real-Time Unit Subsystem and Industrial Communication Subsystem.
