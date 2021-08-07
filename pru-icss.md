@@ -108,6 +108,8 @@ valid interrupt source` and also `PRUSS1_IRQ_39`. From pg 43821 Table 18-553,
 1. [TI Forum: am3359-routing-mcasp0-interrupts-to-pru-intc](https://e2e.ti.com/support/processors-group/processors/f/processors-forum/598002/am3359-routing-mcasp0-interrupts-to-pru-intc)
 2. [TI-forum: gpio crossbar settings](https://e2e.ti.com/support/processors-group/processors/f/processors-forum/504356/notify-overwrites-gpio-crossbar-setting)
 3. [mail-archive: Using irq-crossbar.c](https://www.mail-archive.com/search?l=linux-kernel@vger.kernel.org&q=subject:%22Re%5C%3A+Using+irq%5C-crossbar.c%22&o=newest&f=1)
+4. [TI Forum: am572x-interrupt-mapping-for-dsp-and-gmac](https://e2e.ti.com/support/legacy_forums/embedded/tirtos/f/ti-rtos-forum-read-only-archived/485801/am572x-interrupt-mapping-for-dsp-and-gmac)
+5. [TI:hwi-event-mapping](https://e2e.ti.com/support/processors-group/processors/f/processors-forum/146033/hwi-event-mapping)
 
 ## Misc.
 ![](photos/mcasp-crossbar.png)
