@@ -118,7 +118,21 @@ So, infering from what has been said above, we will try to do the following:
 - once this is done, we have a look at
 > The MII_RT Event Enable Register enables MII_RT mode events to the PRUSS.PRUSS_INTC.
 
-ie. the `PRUSS_MII_RT` register at address `0x4B22 602C`. (**Note** `MII_RT_EVENT_EN`=0b1).
+ie. the `PRUSS_MII_RT` register at address `0x4B22 602C`. (**Note** set the `MII_RT_EVENT_EN`=0b1) to have `PRU-ICSS MII_RT` module associated events, mapped to the same lines.
+
+- In our case, these will be `PRUSS1_IRQ_39` and `38` _IRQ input lines_.
+
+- Now, referring to
+
+> The channel map registers (PRUSS_INTC_CMRi, where i=0 to 15) define the channel for each system interrupt.
+
+and to understand system interrupt, referring to
+
+> Enable required system interrupts: System interrupts that are required to get propagated to host are to be enabled individually by writing to INDEX field in the system interrupt enable indexed set register (`PRUSS_INTC_EISR`). The interrupt to enable is the index value written. This sets the Enable Register bit of the given index.
+
+which means that we need to write `0x26` and `0x27` to `0x4B22 0028` inorder to enable those two interrupts one by one.
+
+- 
 
 ## Common Terms used <a name="comterms"></a>
 - *PRU-ICSS:* Programmable Real-Time Unit Subsystem and Industrial Communication Subsystem.
