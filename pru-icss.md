@@ -100,6 +100,14 @@ valid interrupt source` and also `PRUSS1_IRQ_39`. From pg 43821 Table 18-553,
 *Physical Address:* `0x4A00 28D4`
 ![`CTRL_CORE_PRUSS1_IRQ_38_39`](photos/CTRL_CORE_PRUSS1_IRQ_38_39.png)
 
+## 18.4.6.4 `IRQ_CROSSBAR` Module Functional Description
+
+There are IRQs which are not mapped by default to any interrupt line of any device INTC. All IRQs, connected to the `IRQ_CROSSBAR` inputs, can be remapped to other interrupt lines of the different device INTCs through the `CTRL_CORE_X_IRQ_B_A` registers. Each of these registers has a structure described in Table 18-14.
+![](photos/CTRL_CORE_X_IRQ_B_A1.png)
+
+The individual connection between all module IRQs and all `IRQ_CROSSBAR` inputs is shown in _Section 17.3.12_, Mapping of Device Interrupts to `IRQ_CROSSBAR` Inputs of _Chapter 17_, Interrupt Controllers. <br>
+In addition, the `CTRL_CORE_OVS_IRQ_IO_MUX` register is used to select for observation on two external pads any IRQ connected to the `IRQ_CROSSBAR` inputs. Using the `CTRL_CORE_OVS_IRQ_IO_MUX[17:9]` `OVS_IRQ_IO_MUX_2` bit field all IRQs can be mapped to the  `obs_irq2` signal. The `CTRL_CORE_OVS_IRQ_IO_MUX[8:0] OVS_IRQ_IO_MUX_1` bit field maps all IRQs to the `obs_irq1` signal. For example, setting the `CTRL_CORE_OVS_IRQ_IO_MUX[8:0] OVS_IRQ_IO_MUX_1 to 0x18` maps the `GPIO1_IRQ_1 to the obs_irq1` line and thus this IRQ can be observed.
+
 ## Common Terms used <a name="comterms"></a>
 - *PRU-ICSS:* Programmable Real-Time Unit Subsystem and Industrial Communication Subsystem.
 - *Arm interrupts:* [Refer this tutorial](https://www.electronicshub.org/arm-interrupt-tutorial/)
