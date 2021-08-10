@@ -14,23 +14,6 @@ This project has been done as part of Google Summer of Code 2021 with the Beagle
 - _Youtube_: An Introductory video([click here to view](https://www.youtube.com/watch?v=aVLRUyPBBJk)) has been made to explain the project outline.<br>
 
 
-**Applications of Bela:**
-
-Bela is ideal for creating anything interactive that uses sensors and sound. So far, Bela has been used to create:
-- musical instruments and audio effects
-- kinetic sculptures
-- wearable devices
-- interactive sound installations
-and many more applications that are listed [https://learn.bela.io/get-started-guide/say-hello-to-bela/#what-is-bela here]
-
-Why add support for BBAI/newer TI chips? <br>
-
-The Beagle Black was launched over 7 years ago in 2013 and newer and better TI Sitara Processors have been launched ever since. It would be better to have a more standardized setup that allows an easier jump across TI chips. Soon, newer boards with different and more efficient chips like the AM5X and the TI C66x digital-signal-processor (DSP) cores in the BBAI are coming up that will need to be compatible with the Bela Software and Hardware.
-<br>
-Programming languages and tools to be used:
-
-_C, C++, PRU, dtb, GNU Make, ARM Assembly_
-
 ## Achieved Milestones
 
 1. Created a device tree overlay using [Cape Compatibility layer](https://elinux.org/Beagleboard:BeagleBone_cape_interface_spec) to port [BB-BONE-AUDI](https://github.com/beagleboard/bb.org-overlays/blob/master/src/arm/BB-BONE-AUDI-02-00A0.dts) overlay to the BBAI. <br>
