@@ -9,7 +9,7 @@
 This project has been done as part of Google Summer of Code 2021 with the BeagleBoard.org Foundation. <br>
 An introductory youtube video([click here to view](https://www.youtube.com/watch?v=aVLRUyPBBJk)) has been made to explain the project outline.<br>
 
-![intro](ProjectReportCoverR0.svg)
+![intro](photos/ProjectReportCoverR1.svg)
 
 ## Introduction
 Bela is a hardware and software system for creating beautiful interaction with sensors and sound. This project proposes to provide restructuring and improvement of existing Bela Software Code to allow for compatibility and easier transition to newer TI chips (like in the BBAI).
