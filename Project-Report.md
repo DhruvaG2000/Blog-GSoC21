@@ -37,6 +37,7 @@ The Overlay I wrote has been accepted by BeagleBone maintainer Robert Nelson, an
 	- [prudbg.h](https://github.com/giuliomoro/prudebug/blob/master/prudbg.h)
 	- [prudbg.c](https://github.com/giuliomoro/prudebug/blob/master/prudbg.c)
 
+
 ## Pull Requests
 
 1. [beagleboard/BeagleBoard-DeviceTrees BBAI-AUDI-02-00A0 overlay using the CCL #33](https://github.com/beagleboard/BeagleBoard-DeviceTrees/pull/33)
@@ -52,3 +53,14 @@ The Overlay I wrote has been accepted by BeagleBone maintainer Robert Nelson, an
 6. [MarkAYoder/BeagleBoard-exercises: prudebug: Add BBAI support #7](https://github.com/MarkAYoder/BeagleBoard-exercises/pull/7)
 
 7. [Bela: Add support for BeagleBone AI #668](https://github.com/BelaPlatform/Bela/pull/668)
+
+
+## Project Shortcomings
+
+Due to the `IRQ_CROSSBAR` implementation in the BBAI, porting the existing codes from BELA that use interrupts proved to be a bit complicated.<br>
+After going through the AM572x manual, [a workflow](https://dhruvag2000.github.io/Blog-GSoC21/pru-icss.html#18464-irq_crossbar-module-functional-description) was suggested. However on testing this workflow there still seem to be a few steps missing.
+
+Essentially what we were trying to achieve was McASP --> PRU interrupts like there were in the [pru_rtaudio_irq.p](https://github.com/DhruvaG2000/Bela/blob/BBAI-support/pru/pru_rtaudio_irq.p) code.
+
+Materials referred were: [AM572x sitara manual](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwjen9DJ86XyAhVKbn0KHYyaCnwQFnoECAIQAQ&url=https%3A%2F%2Fwww.ti.com%2Flit%2Fug%2Fspruhz6l%2Fspruhz6l.pdf&usg=AOvVaw1H4iD_SzEGYNYlj70bZ9Wk) and
+[PRU-ICSS Migration Guide](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwjRj-rU86XyAhVbfisKHfQqBskQFnoECAIQAQ&url=http%3A%2F%2Fwww.ti.com%2Flit%2Fan%2Fsprac91%2Fsprac91.pdf&usg=AOvVaw1vtNHcqojXO6uuCUOtYzwp)
