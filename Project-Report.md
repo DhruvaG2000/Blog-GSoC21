@@ -39,7 +39,6 @@ _C, C++, PRU, dtb, GNU Make, ARM Assembly_
 
 ## Achieved Milestones
 
-
 1. Created a device tree overlay using [https://elinux.org/Beagleboard:BeagleBone_cape_interface_spec Cape Compatibility layer] to port [https://github.com/beagleboard/bb.org-overlays/blob/master/src/arm/BB-BONE-AUDI-02-00A0.dts BB-BONE-AUDI] overlay to the BBAI. <br>
 The Overlay I wrote has been accepted by BeagleBone maintainer Robert Nelson, and you can find it to here: https://github.com/beagleboard/BeagleBoard-DeviceTrees/blob/v4.19.x-ti-overlays/src/arm/overlays/BBAI-AUDI-02-00A0.dts
 
@@ -52,3 +51,19 @@ The Overlay I wrote has been accepted by BeagleBone maintainer Robert Nelson, an
 5. Installed a Xenomai patched kernel and ran the full Bela stack.
 
 6. I also ported a debugger for PRU called [https://github.com/giuliomoro/prudebug/tree/master PRUDebug] to work on both the PRUSS on board the AM5792.
+
+## Pull Requests
+
+1. [beagleboard/BeagleBoard-DeviceTrees BBAI-AUDI-02-00A0 overlay using the CCL #33](https://github.com/beagleboard/BeagleBoard-DeviceTrees/pull/33)
+
+2. [BBAI-AUDI-02-00A0.dts: Solved the output audio frequency issue #36 ](https://github.com/beagleboard/BeagleBoard-DeviceTrees/pull/36)
+
+3. [cloud9-examples Corrected: solved a compilation issue #57 ](https://github.com/beagleboard/cloud9-examples/pull/57)
+
+4. [Bela: PruManager Rproc + MMap/ prussdrv+UIO implementation](https://github.com/giuliomoro/Bela-dhruva/pull/1)
+
+5. [giuliomoro/prudebug: Add support for AM57x #2](https://github.com/giuliomoro/prudebug/pull/2)
+
+6. [MarkAYoder/BeagleBoard-exercises: prudebug: Add BBAI support #7](https://github.com/MarkAYoder/BeagleBoard-exercises/pull/7)
+
+7. [Bela: Add support for BeagleBone AI #668](https://github.com/BelaPlatform/Bela/pull/668)
