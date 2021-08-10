@@ -83,7 +83,7 @@ _________________Audio Thread!
 ```
 
 ## Contingencies
-1. ERROR so and so
+1. ERROR _127_:
 ```sh
 root@beaglebone:~/Bela# sudo make PROJECT=exampleTempProject run CL=-v
 Failed to stop bela_startup.service: Unit bela_startup.service not loaded.
@@ -103,6 +103,9 @@ Make sure that you disable/comment out all other overlays in the `/boot/uEnv.txt
 ###Additional custom capes
 uboot_overlay_addr4=/lib/firmware/BB-BELA-00A1.dtbo
 ```
+
+**Note:** BBAI users have to lead the custom overlay that I have written called the [BBAI-BELA-00A1.dts](https://github.com/DhruvaG2000/BeagleBoard-DeviceTrees/blob/v4.19.x-ti-overlays/src/arm/overlays/BBAI-BELA-00A1.dts) which uses the CCL. So make sure you have installed the Cape Compat. Layer properly as well.
+
 3. If you get the following error:
 ```#!/bin/sh
 root@beaglebone:~/Bela# sudo make PROJECT=exampleTempProject run CL=-v
@@ -142,7 +145,8 @@ make: *** [Makefile:588: runonly] Error 1
 Trying modprobe rtdm_pruss_irq returns
 modprobe: FATAL: Module rtdm_pruss_irq not found in directory /lib/modules/4.14.108-ti-xenomai-r143
 ```
-then build with `BELA_USE_DEFINE=BELA_USE_POLL` for now. This will remove the dependency on the rtdm_pruss_irq  driver
+then build with `BELA_USE_DEFINE=BELA_USE_POLL` for now. This will remove the dependency on the `rtdm_pruss_irq`  driver.
+(As of *20 Aug, 2021* this step is very much still required as the interrupts part could not be accomplished _yet_ on the AM57xx.
 
 ## Resources
 1. [BB.org overlays](https://github.com/BelaPlatform/bb.org-overlays)
