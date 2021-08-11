@@ -16,14 +16,17 @@ This project has been done as part of Google Summer of Code 2021 with the Beagle
 ## Introduction
 As given on the [official website](https://learn.bela.io/get-started-guide/say-hello-to-bela/#what-is-bela), Bela is a hardware and software system for creating beautiful interaction with sensors and sound.<br>
 Bela has a lot of analog and digital inputs and outputs for hooking up sensors and controlling other devices, and most importantly Bela has _stereo audio i/o_  allowing you to interact with the world of sound. <br>
-Both Bela systems use the same Bela software. It uses a customized Debian distribution which - most notably - uses a '''Xenomai kernel''' instead of a stock kernel. _Xenomai_ is _co-kernel_ for Linux which allows to achieve hard ___real-time performance___ on Linux machines (http://xenomai.org/). It thus takes advantage of features of the BeagleBone computers and can achieve extremely fast audio and sensor processing times. <br>
+Both Bela systems use the same Bela software. It uses a customized Debian distribution which - most notably - uses a _Xenomai kernel_ instead of a stock kernel. _Xenomai_ is _co-kernel_ for Linux which allows to achieve hard ___real-time performance___ on Linux machines ([ref: xenomai.org](http://xenomai.org/)). It thus takes advantage of features of the BeagleBone computers and can achieve extremely fast audio and sensor processing times. <br>
 Although the proposal Title mentions support for AI, I will try to develop a standardized setup that allows an easy jump across all TI chips.
 
 **Bela and BB**
+<br>
+
 ![](https://bela.io/images/products/bela.png)
+<br>
 Bela systems have used BeagleBoard computers from the very beginning. Bela uses the BeagleBone Black, and Bela Mini uses the PocketBeagle.
 
-Both the BeagleBone Black and the PocketBeagle feature programmable real-time units, or PRUs, which are central to the way Bela works. These PRUs enable Bela’s ultra-low latency processing: They are fast (200MHz, 32-bit) processors with single-cycle I/O access to a number of the board’s pins, as well as full access to the internal memory and peripherals.
+Both the BeagleBone Black, the PocketBeagle, (and also the BBAI) feature **programmable real-time units**, or ___PRUs___, which are central to the way Bela works. These PRUs enable Bela’s ultra-low latency processing: They are fast (200MHz, 32-bit) processors with single-cycle I/O access to a number of the board’s pins, as well as full access to the internal memory and peripherals.
 
 **Applications of Bela:**
 
@@ -32,7 +35,7 @@ Bela is ideal for creating anything interactive that uses sensors and sound. So 
 - kinetic sculptures
 - wearable devices
 - interactive sound installations
-and many more applications that are listed [https://learn.bela.io/get-started-guide/say-hello-to-bela/#what-is-bela here]
+and many more applications that are listed [here](https://learn.bela.io/get-started-guide/say-hello-to-bela/#what-is-bela)
 
 **Why** add support for BBAI/newer TI chips? <br>
 
