@@ -139,6 +139,33 @@ So, we want the system interrupt `0x26 and 27` to be mapped to channel 1 which w
 
 - Now that we have mapped the right McASP interrupts to channel 1, which is what the existing BELA PRU IRQ Code checks for already, I think so that the above described workflow should be enough.
 
+## PRUSSDRV to RPROC
+- The basic unit of communication between remoteproc and the PRU as of now is
+using *downcalls* and *syscalls*.
+
+- A *syscall* is when the PRU raises an IRQ and halts itself, storing some
+values in its registers. The kernel module handles the syscall IRQ, it
+reads the registers, manipulates them and resumes the PRU over the HALT
+instruction. [See here](https://github.com/abhishek-kakkar/BeagleLogic/blob/master/beaglelogic-firmware/pru_syscalls.asm) for an example code of the syscall on the PRU side.
+
+- A *downcall* is initiated by the kernel module. Think of it as calling a
+function in the PRU from the kernel module and receiving the return value
+back in the kernel module. <br>
+*Note:* The PRU has to be polling for the downcall, and it acknowledges with a
+special syscall. Then the function `handle_downcall` is called, which
+receives the downcall value and the parameters. So the `handle_downcall`
+[example](https://github.com/abhishek-kakkar/BeagleLogic/blob/master/beaglelogic-firmware/beaglelogic-pru0.c#L106) is a switch-case thing where the PRU does something and once it returns
+from this function, there is a syscall triggered which signals that the
+downcall is complete, the kernel module reads the return value of the
+function, after which the downcalling function in the kernel module returns
+with the return value.
+
+- the crux is that remoteproc currently is very application-specific and you have to twist and adapt the
+kernel module to your needs. Once the remoteproc stuff gets finalized,
+ideally there would be a generic framework and userspace layer on top of
+the driver to allow you to write your own applications from userspace, in a
+similar way as it is currently done using libprussdrv.
+
 ## Common Terms used <a name="comterms"></a>
 - *PRU-ICSS:* Programmable Real-Time Unit Subsystem and Industrial Communication Subsystem.
 - *Arm interrupts:* [Refer this tutorial](https://www.electronicshub.org/arm-interrupt-tutorial/)
@@ -149,6 +176,7 @@ So, we want the system interrupt `0x26 and 27` to be mapped to channel 1 which w
 3. [mail-archive: Using irq-crossbar.c](https://www.mail-archive.com/search?l=linux-kernel@vger.kernel.org&q=subject:%22Re%5C%3A+Using+irq%5C-crossbar.c%22&o=newest&f=1)
 4. [TI Forum: am572x-interrupt-mapping-for-dsp-and-gmac](https://e2e.ti.com/support/legacy_forums/embedded/tirtos/f/ti-rtos-forum-read-only-archived/485801/am572x-interrupt-mapping-for-dsp-and-gmac)
 5. [TI:hwi-event-mapping](https://e2e.ti.com/support/processors-group/processors/f/processors-forum/146033/hwi-event-mapping)
+6. [BB-archive:prussdrv-to-remoteproc](https://beagleboard.narkive.com/rBJOnq8h/prussdrv-to-remoteproc)
 
 ## Misc.
 ![](photos/mcasp-crossbar.png)
