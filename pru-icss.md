@@ -1,12 +1,4 @@
-# PRU-ICSS integrated Interrupt Controller
-
-# Table of Contents
-1. [Overview](#overview)
-2. [Functional Description]()
-3. [Events Flow]()
-4. [interrupt controller registers]()
-5. [Common Terms used](#comterms)
-
+# PRU Interrupt Study
 
 ## PRU-ICSS Interrupt Controller Overview <a name="overview"></a>
 ![int-overview](photos/int-overview.png)
