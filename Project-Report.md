@@ -45,6 +45,52 @@ Programming languages and tools to be used:
 
 _C, C++, PRU, dtb, GNU Make, ARM Assembly_
 
+## Implementation Details
+The hardware was partially working on the BBAI using only ALSA([Advanced Linux Sound Architecture](https://en.wikipedia.org/wiki/Advanced_Linux_Sound_Architecture)) and the SPI driver [1](https://github.com/giuliomoro/beaglebone-ai-bela). However, the Bela real-time code on ARM and PRU was not running on the BBAI yet.<br>
+This project involved dealing with pinmuxing (using overlays), PRU assembly, C and C++ for Linux user space applications. Also studied the Technical Reference Manual for the Sitara family of SoCs. ([AM5729](https://www.ti.com/lit/ug/spruhz6l/spruhz6l.pdf)  and the AM335x).
+
+### Background
+
+**What is RProc?** <br>
+The remoteproc framework allows different platforms/architectures to
+control (power on, load firmware, power off) those remote processors while
+abstracting the hardware differences, so the entire driver doesn't need to be
+duplicated. In addition, this framework also adds rpmsg virtio devices
+for remote processors that supports this kind of communication. This way,
+platform-specific remoteproc drivers only need to provide a few low-level
+handlers <br>
+Reference: [kernel.org](https://www.kernel.org/doc/Documentation/remoteproc.txt)
+
+**What is a Device Tree Overlay?**
+Sometimes it is not convenient to describe an entire system with a
+single FDT(Flattened Device Tree). For example, processor modules that are plugged into one or
+more modules (a la the BeagleBone), or systems with an FPGA peripheral
+that is programmed after the system is booted.
+For these cases it is proposed to implement an overlay feature
+so that the initial device tree data can be modified by userspace at
+runtime by loading additional overlay FDTs that amend the original data.
+<br>
+**How is an overlay compiled?**<br>
+dtc (Device Tree Compiler) - converts between the human editable device tree source `dts` format and the compact device tree blob `dtb` representation usable by the kernel or assembler source. <br> Once an overlay is compiled, it generates a `.dtbo` file which we can then use in the next stage to load the overlay. <br>
+To know more on how to compile and load the overlay, just head over to [overlay-instructions](https://dhruvag2000.github.io/Blog-GSoC21/Bela/overlay-instructions.html).
+
+### Details of Implementation
+
+The places within the Bela core code that required intervention are:<br>
+1. The [Makefile](https://github.com/giuliomoro/Bela-dhruva/blob/BBAI-support/Makefile#L297): updated the workflow to build the PRU code for remoteproc. Also implemented auto-detection of which processor the code was being compiled on which was passed as a compile time flag to the BELA PRU and Core codes. <br>
+2. Developed [PruManager code](https://github.com/giuliomoro/Bela-dhruva/blob/BBAI-support/core/PruManager.cpp) which combines RProc and UIO PRUSS(using the libprussdrv API) implementation all under one roof.
+3. PRU Codes: In `pru/pru_rtaudio.p` the hard-coded McASP, SPI and GPIO constants were replaced with board-dependent ones using `board_specific.h`.
+4. Other places like `Gpio.cpp`, `bela_hw_settings.h`, and a few other codes also needed updating the base addresses for including the new AM572x constants.
+<br>
+
+I also wrote 2 device tree overlays using the CCL,<br>
+1. [BBAI-AUDI-02-00A0:](https://github.com/beagleboard/BeagleBoard-DeviceTrees/blob/v4.19.x-ti-overlays/src/arm/overlays/BBAI-AUDI-02-00A0.dts) which essentially helps ALSA detect the BELA Cape as an audio device and you can play audio files with it using the command `aplay`.
+2. [BBAI-BELA-00A1.dts:](https://github.com/DhruvaG2000/BeagleBoard-DeviceTrees/blob/v4.19.x-ti-overlays/src/arm/overlays/BBAI-BELA-00A1.dts) It helps set the right pinmux for the I2C, SPI, GPIO, etc. for them all to work correctly.
+<br>
+
+and, I also ported a debugger for PRU called [PRUDebug](https://github.com/giuliomoro/prudebug/tree/master) to the BBAI.
+
+
 
 ## Achieved Milestones
 
