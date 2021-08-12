@@ -84,9 +84,33 @@ To know more on how to compile and load the overlay, just head over to [overlay-
 
 The places within the Bela core code that required intervention are:<br>
 1. The [Makefile](https://github.com/giuliomoro/Bela-dhruva/blob/BBAI-support/Makefile#L297): updated the workflow to build the PRU code for remoteproc. Also implemented auto-detection of which processor the code was being compiled on which was passed as a compile time flag to the BELA PRU and Core codes. <br>
-2. Developed [PruManager code](https://github.com/giuliomoro/Bela-dhruva/blob/BBAI-support/core/PruManager.cpp) which combines RProc and UIO PRUSS(using the libprussdrv API) implementation all under one roof.
-3. PRU Codes: In `pru/pru_rtaudio.p` the hard-coded McASP, SPI and GPIO constants were replaced with board-dependent ones using `board_specific.h`.
-4. Other places like `Gpio.cpp`, `bela_hw_settings.h`, and a few other codes also needed updating the base addresses for including the new AM572x constants.
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+2. Developed [PruManager code](https://github.com/giuliomoro/Bela-dhruva/blob/BBAI-support/core/PruManager.cpp) which combines RProc and UIO PRUSS(using the libprussdrv API) implementation all under one roof. <br>
+**Transitioning from libprussdrv to rproc:**<br>
+	I initially believed that I needed to change the initialization code in [PRU.cpp](https://github.com/BelaPlatform/Bela/blob/master/core/PRU.cpp#L18) that is currently relying on `libprussdrv` and move to using `rproc`. I was not sure if rproc provides some functionalities to access the PRU's RAM the way `prussdrv_map_prumem()` used to, that essentially gives access to a previously mmap'ed area of memory. <br>
+	On the latest Bela code there's a `Mmap` class which can make this somehow simpler ([ref. here](http://docs.bela.io/classMmap.html)). <br>
+	For this transition, maintaining backward compatibility was also quite essential. This is what the `PruManager` class achieves. Below is a rough structure of the [class `PruManager`:](https://github.com/giuliomoro/Bela-dhruva/blob/BBAI-support/include/PruManager.h)<br>
+	- class PruManager // This is the abstract base class<br>
+	Protected variables: [here](https://github.com/giuliomoro/Bela-dhruva/blob/BBAI-support/include/PruManager.h#L23-L26)
+	functions:
+		- `void stop();`
+		- `int start(bool useMcaspIrq);`
+		- `int start(const std::string& path);
+		- `void* getOwnMemory();`
+		- `void* getSharedMemory();`<br>
+								The classes below are children of the above
+	- `class PruManagerRprocMmap` is responsible for RProc implementation.
+	The RProc class is named so, because we are using the `Mmap.h` header mentioned above to access `/dev/mem` on the BeagleBones to read or write to desired global memory locations.
+	- `class PruManagerUio`
+
+
+3. PRU Codes: In `pru/pru_rtaudio.p` the hard-coded McASP, SPI and GPIO constants were replaced with board-dependent ones using `board_specific.h`.<br>
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+4. Other places like `Gpio.cpp`, `bela_hw_settings.h`, and a few other codes also needed updating the base addresses for including the new AM572x constants.<br>
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
 <br>
 
 I also wrote 2 device tree overlays using the CCL,<br>
