@@ -70,6 +70,12 @@ For these cases it is proposed to implement an overlay feature
 so that the initial device tree data can be modified by userspace at
 runtime by loading additional overlay FDTs that amend the original data.
 <br>
+**Pinmuxing**
+The following pin diagram <br>
+![](https://www.mathworks.com/help/supportpkg/beagleboneio/ug/beaglebone_black_pinmap.png) <br> from a mathworks forum aided greatly to help visualize and compare the pins on the BeagleBone black versus the BeagleBone AI. <br>
+Also, inorder to write a DTO using CCL, I referred [am572x-bone-common-univ.dtsi](https://github.com/DhruvaG2000/BeagleBoard-DeviceTrees/blob/v4.19.x-ti-overlays/src/arm/am572x-bone-common-univ.dtsi) which helps one understand the names and references to the pinmuxes.
+
+<br>
 **How is an overlay compiled?**<br>
 dtc (Device Tree Compiler) - converts between the human editable device tree source `dts` format and the compact device tree blob `dtb` representation usable by the kernel or assembler source. <br> Once an overlay is compiled, it generates a `.dtbo` file which we can then use in the next stage to load the overlay. <br>
 To know more on how to compile and load the overlay, just head over to [overlay-instructions](https://dhruvag2000.github.io/Blog-GSoC21/Bela/overlay-instructions.html).
