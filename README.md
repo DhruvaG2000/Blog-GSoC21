@@ -1,4 +1,4 @@
-# Bela support for the BBAI
+# GSoC2021 Project Report: Bela support for the BBAI
 
 ![intro](photos/ProjectReportCoverR2.svg)
 

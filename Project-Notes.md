@@ -1,4 +1,4 @@
-# GSoC 2021: Bela Support for the BBAI
+# Project Notes
 You can find the link to my proposal: Bela compatibility for the BBAI [here.](https://elinux.org/BeagleBoard/GSoC/2021_Proposal/bela_on_bbai)
 
 This Blog talks about everything I have learned so far about the Bela Platform and BeagleBoards. This includes everything from linux filestructure, the boot process, accessing the PRUs, Real-time Kernels and much more! Hope you find this helpful!  
