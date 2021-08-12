@@ -1,5 +1,48 @@
 # PRU Interrupt Study
 
+## Aim
+How does one route a McASP Rx/Tx IRQ to the PRU via the CROSSBAR? Is this supported by any existing driver?
+
+## 18.4.6.4 `IRQ_CROSSBAR` Module Functional Description
+
+There are IRQs which are not mapped by default to any interrupt line of any device INTC. All IRQs, connected to the `IRQ_CROSSBAR` inputs, can be remapped to other interrupt lines of the different device INTCs through the `CTRL_CORE_X_IRQ_B_A` registers. Each of these registers has a structure described in Table 18-14.
+![](photos/CTRL_CORE_X_IRQ_B_A1.png)
+(source pg 4195 of TRM AM57x)
+The individual connection between all module IRQs and all `IRQ_CROSSBAR` inputs is shown in _Section 17.3.12_ (**Which we have already observed and the image is pasted down below, where we can see corssbar --> MCASP**), Mapping of Device Interrupts to `IRQ_CROSSBAR` Inputs of _Chapter 17_, Interrupt Controllers. <br>
+In addition, the `CTRL_CORE_OVS_IRQ_IO_MUX` register is used to select for observation on two external pads any IRQ connected to the `IRQ_CROSSBAR` inputs. Using the `CTRL_CORE_OVS_IRQ_IO_MUX[17:9]` `OVS_IRQ_IO_MUX_2` bit field all IRQs can be mapped to the  `obs_irq2` signal. The `CTRL_CORE_OVS_IRQ_IO_MUX[8:0] OVS_IRQ_IO_MUX_1` bit field maps all IRQs to the `obs_irq1` signal. For example, setting the `CTRL_CORE_OVS_IRQ_IO_MUX[8:0] OVS_IRQ_IO_MUX_1 to 0x18` maps the `GPIO1_IRQ_1 to the obs_irq1` line and thus this IRQ can be observed.
+
+So, infering from what has been said above, we will try to do the following:
+
+- We know, that `CTRL_CORE_OVS_IRQ_IO_MUX` is at `0x4A00 2D50` location.
+- It has `OVS_IRQ_IO_MUX_1` at bits _8:0_ <br> and `2` at bits _17:9_ .
+- McASP rx is `IRQ_CROSSBAR_103` which is in hex `0x67` <br> and MCASP tx is `IRQ_CROSSBAR_104` ie. `0x68`.
+- for testing purposes, we can use the `devmem2` tool to try and set these in the required bits. (**note:** a word is 16 bits). Once that's done we expect to to have the bit fields mapped to `obs_irq1` and `obs_irq2` respectively.
+- after these bits are set, we can make use of the `CTRL_CORE_X_IRQ_B_A` registers, specifically `CTRL_CORE_PRUSS1_IRQ_38_39` and set the bits _8:0_ ie. `PRUSS1_IRQ_38` and _24:16_ ie. `PRUSS1_IRQ_39` to `0x67` and `0x68` respectively.
+- once this is done, we have a look at
+> The MII_RT Event Enable Register enables MII_RT mode events to the PRUSS.PRUSS_INTC.
+
+ie. the `PRUSS_MII_RT` register at address `0x4B22 602C`. (**Note** set the `MII_RT_EVENT_EN`=0b1) to have `PRU-ICSS MII_RT` module associated events, mapped to the same lines.
+
+- In our case, these will be `PRUSS1_IRQ_39` and `38` _IRQ input lines_.
+
+- Now, referring to
+
+> The channel map registers (PRUSS_INTC_CMRi, where i=0 to 15) define the channel for each system interrupt.
+
+and to understand system interrupt, referring to
+
+> Enable required system interrupts: System interrupts that are required to get propagated to host are to be enabled individually by writing to INDEX field in the system interrupt enable indexed set register (`PRUSS_INTC_EISR`). The interrupt to enable is the index value written. This sets the Enable Register bit of the given index.
+
+which means that we need to write `0x26` and `0x27` to `0x4B22 0028` inorder to enable those two interrupts one by one.
+
+- It is pobably worth reading the "The next stage is to capture which system interrupts are pending." part, which I am not sure, but think it has been done already in the BELA Pru irq code.
+
+- Now, we come to `PRUSS_INTC_CMRi` registers located at `0x4B22N 0400 + 0X4*i`, where i in our case will be channel i=1. <br>
+So, we want the system interrupt `0x26 and 27` to be mapped to channel 1 which when divided by 4 means that we write the value of k as `0x9` to the bits `11:8` ie. `CH_MAP_1`.
+
+- Now that we have mapped the right McASP interrupts to channel 1, which is what the existing BELA PRU IRQ Code checks for already, I think so that the above described workflow should be enough.
+
+
 ## PRU-ICSS Interrupt Controller Overview <a name="overview"></a>
 ![int-overview](photos/int-overview.png)
 The PRU-ICSS interrupt controller (`PRUSS_INTC`) maps interrupts coming from different parts of the device (mapped to PRU-ICSS1/PRU-ICSS2 via the device `IRQ_CROSSBAR`) to a reduced set of PRU-ICSS interrupt channels.
@@ -91,45 +134,6 @@ valid interrupt source` and also `PRUSS1_IRQ_39`. From pg 43821 Table 18-553,
 *Addr offset:* `0x0000 08D4`
 *Physical Address:* `0x4A00 28D4`
 ![`CTRL_CORE_PRUSS1_IRQ_38_39`](photos/CTRL_CORE_PRUSS1_IRQ_38_39.png)
-
-## 18.4.6.4 `IRQ_CROSSBAR` Module Functional Description
-
-There are IRQs which are not mapped by default to any interrupt line of any device INTC. All IRQs, connected to the `IRQ_CROSSBAR` inputs, can be remapped to other interrupt lines of the different device INTCs through the `CTRL_CORE_X_IRQ_B_A` registers. Each of these registers has a structure described in Table 18-14.
-![](photos/CTRL_CORE_X_IRQ_B_A1.png)
-(source pg 4195 of TRM AM57x)
-The individual connection between all module IRQs and all `IRQ_CROSSBAR` inputs is shown in _Section 17.3.12_ (**Which we have already observed and the image is pasted down below, where we can see corssbar --> MCASP**), Mapping of Device Interrupts to `IRQ_CROSSBAR` Inputs of _Chapter 17_, Interrupt Controllers. <br>
-In addition, the `CTRL_CORE_OVS_IRQ_IO_MUX` register is used to select for observation on two external pads any IRQ connected to the `IRQ_CROSSBAR` inputs. Using the `CTRL_CORE_OVS_IRQ_IO_MUX[17:9]` `OVS_IRQ_IO_MUX_2` bit field all IRQs can be mapped to the  `obs_irq2` signal. The `CTRL_CORE_OVS_IRQ_IO_MUX[8:0] OVS_IRQ_IO_MUX_1` bit field maps all IRQs to the `obs_irq1` signal. For example, setting the `CTRL_CORE_OVS_IRQ_IO_MUX[8:0] OVS_IRQ_IO_MUX_1 to 0x18` maps the `GPIO1_IRQ_1 to the obs_irq1` line and thus this IRQ can be observed.
-
-So, infering from what has been said above, we will try to do the following:
-
-- We know, that `CTRL_CORE_OVS_IRQ_IO_MUX` is at `0x4A00 2D50` location.
-- It has `OVS_IRQ_IO_MUX_1` at bits _8:0_ <br> and `2` at bits _17:9_ .
-- McASP rx is `IRQ_CROSSBAR_103` which is in hex `0x67` <br> and MCASP tx is `IRQ_CROSSBAR_104` ie. `0x68`.
-- for testing purposes, we can use the `devmem2` tool to try and set these in the required bits. (**note:** a word is 16 bits). Once that's done we expect to to have the bit fields mapped to `obs_irq1` and `obs_irq2` respectively.
-- after these bits are set, we can make use of the `CTRL_CORE_X_IRQ_B_A` registers, specifically `CTRL_CORE_PRUSS1_IRQ_38_39` and set the bits _8:0_ ie. `PRUSS1_IRQ_38` and _24:16_ ie. `PRUSS1_IRQ_39` to `0x67` and `0x68` respectively.
-- once this is done, we have a look at
-> The MII_RT Event Enable Register enables MII_RT mode events to the PRUSS.PRUSS_INTC.
-
-ie. the `PRUSS_MII_RT` register at address `0x4B22 602C`. (**Note** set the `MII_RT_EVENT_EN`=0b1) to have `PRU-ICSS MII_RT` module associated events, mapped to the same lines.
-
-- In our case, these will be `PRUSS1_IRQ_39` and `38` _IRQ input lines_.
-
-- Now, referring to
-
-> The channel map registers (PRUSS_INTC_CMRi, where i=0 to 15) define the channel for each system interrupt.
-
-and to understand system interrupt, referring to
-
-> Enable required system interrupts: System interrupts that are required to get propagated to host are to be enabled individually by writing to INDEX field in the system interrupt enable indexed set register (`PRUSS_INTC_EISR`). The interrupt to enable is the index value written. This sets the Enable Register bit of the given index.
-
-which means that we need to write `0x26` and `0x27` to `0x4B22 0028` inorder to enable those two interrupts one by one.
-
-- It is pobably worth reading the "The next stage is to capture which system interrupts are pending." part, which I am not sure, but think it has been done already in the BELA Pru irq code.
-
-- Now, we come to `PRUSS_INTC_CMRi` registers located at `0x4B22N 0400 + 0X4*i`, where i in our case will be channel i=1. <br>
-So, we want the system interrupt `0x26 and 27` to be mapped to channel 1 which when divided by 4 means that we write the value of k as `0x9` to the bits `11:8` ie. `CH_MAP_1`.
-
-- Now that we have mapped the right McASP interrupts to channel 1, which is what the existing BELA PRU IRQ Code checks for already, I think so that the above described workflow should be enough.
 
 ## PRUSSDRV to RPROC
 - The basic unit of communication between remoteproc and the PRU as of now is
