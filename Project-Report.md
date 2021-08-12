@@ -92,14 +92,15 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 	On the latest Bela code there's a `Mmap` class which can make this somehow simpler ([ref. here](http://docs.bela.io/classMmap.html)). <br>
 	For this transition, maintaining backward compatibility was also quite essential. This is what the `PruManager` class achieves. Below is a rough structure of the [class `PruManager`:](https://github.com/giuliomoro/Bela-dhruva/blob/BBAI-support/include/PruManager.h)<br>
 	- class PruManager // This is the abstract base class<br>
-	Protected variables: [here](https://github.com/giuliomoro/Bela-dhruva/blob/BBAI-support/include/PruManager.h#L23-L26)
-	functions:
-		- `void stop();`
-		- `int start(bool useMcaspIrq);`
-		- `int start(const std::string& path);
-		- `void* getOwnMemory();`
-		- `void* getSharedMemory();`<br>
-								The classes below are children of the above
+	**Protected variables:** [see here](https://github.com/giuliomoro/Bela-dhruva/blob/BBAI-support/include/PruManager.h#L23-L26)<br>
+	**functions:**<br>
+		- `void stop();` as the name suggests, stops the PRU
+		- `int start(bool useMcaspIrq);` The first start is called by the `PRU.cpp` code where required, where `useMcaspIrq` is a flag that decides which pru code is to be used out of `pru_rtaudio.p` and `pru_rtaudio_irq.p`.
+		- `int start(const std::string& path);` The second start is called within the first one after the choice of PRU code is made. This function then does the job of loading the firmware file and starting the PRU.
+		- `void* getOwnMemory();` Each PRU has is own 8KB of data memory (Data Mem0 and Mem1) and 12KB of shared memory (Shared RAM). (ref. [prucookbook](https://beagleboard.org/static/prucookbook/#_memory_allocation))
+		- `void* getSharedMemory();` refer the DATA RAM2 (shared) block in the diagram below from the AM572x Ref. Manual<br> ![](photos/PRU-overview.png)
+
+	The classes below are children of the above `PruManager` virtual base class.
 	- `class PruManagerRprocMmap` is responsible for RProc implementation.
 	The RProc class is named so, because we are using the `Mmap.h` header mentioned above to access `/dev/mem` on the BeagleBones to read or write to desired global memory locations.
 	- `class PruManagerUio`
