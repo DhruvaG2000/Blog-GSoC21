@@ -98,15 +98,16 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 		- `int start(bool useMcaspIrq);` The first start is called by the `PRU.cpp` code where required, where `useMcaspIrq` is a flag that decides which pru code is to be used out of `pru_rtaudio.p` and `pru_rtaudio_irq.p`.
 		- `int start(const std::string& path);` The second start is called within the first one after the choice of PRU code is made. This function then does the job of loading the firmware file and starting the PRU.
 		- `void* getOwnMemory();` Each PRU has is own 8KB of data memory (Data Mem0 and Mem1) and 12KB of shared memory (Shared RAM). (ref. [prucookbook](https://beagleboard.org/static/prucookbook/#_memory_allocation))
-		- `void* getSharedMemory();` refer the DATA RAM2 (shared) block in the diagram below from the AM572x Ref. Manual<br> ![](photos/PRU-overview.png)
+		- `void* getSharedMemory();` refer the DATA RAM2 (shared) block in the diagram below from the AM572x Ref. Manual<br>These last 2 functions are responsible for accessing the data memory and shared memory respectively.<br>![](photos/PRU-overview.png)
 
 	The classes below are children of the above `PruManager` virtual base class.
 	- `class PruManagerRprocMmap` is responsible for RProc implementation.
-	The RProc class is named so, because we are using the `Mmap.h` header mentioned above to access `/dev/mem` on the BeagleBones to read or write to desired global memory locations.
-	- `class PruManagerUio`
+	The RProc Mmap class is named so, because we are also using the `Mmap.h` header mentioned above to access `/dev/mem` on the BeagleBones to read or write to desired global memory locations.<br>
+	This class currently has been tested only on the AM572x processor (_ie. the BBAI_).
+	- `class PruManagerUio` is basically a ditto implementation of the `libprussdrv` approach that was being used earlier. This class is mainly useful to maintain backward compatibility with v4.14 on the BBB+Bela. It _does not_ support the AM572x processor.
+	- The Makefile passes the flags `ENABLE_PRU_RPROC` which tells the core/codes to use the RProc implementation _or else_ `ENABLE_PRU_UIO` tells the core/codes to keep using the old `libprussdrv` implementation.
 
-
-3. PRU Codes: In `pru/pru_rtaudio.p` the hard-coded McASP, SPI and GPIO constants were replaced with board-dependent ones using `board_specific.h`.<br>
+3. **PRU Codes:** In `pru/pru_rtaudio.p` the hard-coded McASP, SPI and GPIO constants were replaced with board-dependent ones using `board_specific.h`.<br>
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
 4. Other places like `Gpio.cpp`, `bela_hw_settings.h`, and a few other codes also needed updating the base addresses for including the new AM572x constants.<br>
