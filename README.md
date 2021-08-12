@@ -1,122 +1,181 @@
-# GSoC 2021: Bela Support for the BBAI
-You can find the link to my proposal: Bela compatibility for the BBAI [here.](https://elinux.org/BeagleBoard/GSoC/2021_Proposal/bela_on_bbai)
+# Bela support for the BBAI
 
-This Blog talks about everything I have learned so far about the Bela Platform and BeagleBoards. This includes everything from linux filestructure, the boot process, accessing the PRUs, Real-time Kernels and much more! Hope you find this helpful!  
-Most of the basics are referred from the book _Exploring BeagleBone. Tools and Techniques for Building with Embedded Linux by Derek Molloy_, so be sure to check it out as well!
+![intro](photos/ProjectReportCoverR2.svg)
 
-# Table of Contents
-1. [Introduction](#Introduction)
-    - [What is the BeagleBone® AI?](#bbai-intro)
-2. [General Overview](General.md)
-    - [Official Documentation Sources](#official-docs)
-    - [Capes](#ca)
-    - [LED Blink!](#onboardLEDS)
-3. [Embedded Linux Systems](#Embedded-Linux-Systems)
-    - [Bootloaders](#bootloaders)
-    - [Kernel Space and User Space](#kernel-and-user-space)
-4. [Practical Beagle Board Programming](#Board-Programming)
-5. [Interfacing to the Beagle Board](#Interfacing)
-    - [Interfacing to the Beagle Board I/Os](#ios)
-    - [Interfacing to the Beagle Board buses](#buses)
-    - [Real-Time Interfacing with the PRU-ICSS](#PRU)
-    - [The Remote Processor Framework](#remoteproc)
-6. [Bela](Bela/README.md)
-7. [References](#ref)
-8. [Additional Help](#help)
+This project proposes to provide restructuring and improvement of existing Bela Software Code to allow for compatibility and easier transition to newer Texas Instrument Sitara Processors (like the AM5729 in the BeagleBone AI).
 
-**[My Project weekly logs can be found here](https://dhruvag2000.github.io/Blog-GSoC21/logs)**
+## About
+- _Student Name:_ Dhruva Gole
+- _Mentors:_ ﻿[Giulio Moro](https://github.com/giuliomoro), Stephen Arnold and Robert Manzke
+- _GSoC Entry link:_ [GSoC entry #5697403266531328](https://summerofcode.withgoogle.com/projects/#5697403266531328)
+- _Wiki:_ [BB.org forum bela-support-for-bbai](https://forum.beagleboard.org/t/bela-support-for-bbai-later-ti-chips/29257/7)
+- _Blog Link:_ [Bela Support for BBAI](https://dhruvag2000.github.io/Blog-GSoC21/) <br>
+This project has been done as part of Google Summer of Code 2021 with the BeagleBoard.org Foundation. <br>
+- _Youtube_: An Introductory video([click here to view](https://www.youtube.com/watch?v=aVLRUyPBBJk)) has been made to explain the project outline.<br>
 
-## Introduction to beagleboard and the BeagleBone® AI <a name="Introduction"></a>
-[The BeagleBoard](General.md) has been arround since 2008 and is a low-power open-source single-board computer produced by Texas Instruments in association with Digi-Key and Newark element14. It was designed with open source software development in mind.
+## Introduction
+As given on the [official website](https://learn.bela.io/get-started-guide/say-hello-to-bela/#what-is-bela), Bela is a hardware and software system for creating beautiful interaction with sensors and sound.<br>
+Bela has a lot of analog and digital inputs and outputs for hooking up sensors and controlling other devices, and most importantly Bela has _stereo audio i/o_  allowing you to interact with the world of sound. <br>
+Both Bela systems use the same Bela software. It uses a customized Debian distribution which - most notably - uses a _Xenomai kernel_ instead of a stock kernel. _Xenomai_ is _co-kernel_ for Linux which allows to achieve hard ___real-time performance___ on Linux machines ([ref: xenomai.org](http://xenomai.org/)). It thus takes advantage of features of the BeagleBone computers and can achieve extremely fast audio and sensor processing times. <br>
+Although the proposal Title mentions support for AI, I will try to develop a standardized setup that allows an easy jump across all TI chips.
 
-### [What is **BeagleBone® AI**?](https://beagleboard.org/ai) <a name="bbai-intro"></a>
-- BeagleBone® AI fills the gap between small SBCs and more powerful industrial computers.
-- It has the the ***TI C66x digital-signal-processor (DSP) cores*** and ***embedded-vision-engine (EVE) cores*** that makes it easy to explore how artificial intelligence (AI) can be used in everyday life.
+**Bela and BB**
+<br>
 
-## General Overview of BeagleBoards <a name="Overview"></a>
-Before we dive into the world of BeagleBoard, we need to get a few jargon and basic concepts out of our way first!
-Let's have a look at when one should consider using the Beagle Boards. \
-The Beagle boards are perfectly placed for the integration of _high-level_ software and _low-level_ electronics in any type of project.\
-The major _advantage_ over more traditional embedded systems, such as the Arduino, PIC, and AVR microcontrollers, is apparent when you leverage the **Linux OS** for your projects.\
-For example, if you built a home automation system using the BeagleBone and you then decided that you wanted to make certain information available on the internet, you could simply install a web server. Linux also provides you with device driver support for many USB peripherals and adapters, making it possible for you to connect cameras, Wi-Fi adapters, and other low-cost consumer periph-erals directly to your platform.
+![](https://bela.io/images/products/bela.png)
+<br>
+Bela systems have used BeagleBoard computers from the very beginning. Bela uses the BeagleBone Black, and Bela Mini uses the PocketBeagle.
 
-### BeagleBone Official Documentation <a name="official-docs"></a>
-- The BeagleBoard.org website: This provides the main support for this platform, with software guides, community links, and downloads
-- [Sitara AM5729 ARM Cortex-A15 Technical Reference Manual (TRM):](https://www.ti.com/lit/pdf/spruhz6) this document contains anything you could possibly want to know about the internal workings of the AM5729.
-- [BeagleBone AI System Reference Manual:](https://github.com/beagleboard/beaglebone-ai/wiki/System-Reference-Manual) This is the core document that describes the BeagleBone Black hardware.
+Both the BeagleBone Black, the PocketBeagle, (and also the BBAI) feature **programmable real-time units**, or ___PRUs___, which are central to the way Bela works. These PRUs enable Bela’s ultra-low latency processing: They are fast (200MHz, 32-bit) processors with single-cycle I/O access to a number of the board’s pins, as well as full access to the internal memory and peripherals.
 
-### Capes <a name="capes"></a>
-Capes are daughter boards that can be attached to the P8/P9 expansion headers on the BeagleBone boards. You can connect up to four capes at any one time when the capes are compatible with each other. Here, we will mostly be focusing on the Robotics Cape and the Bela Cape (both of which will be coming up subsequently to support the BBAI).
+**Applications of Bela:**
 
-### On-Board LEDs <a name="onboardLEDS"></a>
-To understand how to control the hardware pins of the BB Boards, let's first start off by understanding how to control the bare minimum on-board LEDs. We have 4 in-built LEDs. But to control this, we need some pre-requisites:
-* _Sysfs_ is a virtual file system that provides you with access to devices and drivers that would otherwise be accessible only within a restricted kernel space(refer [here](https://satacker.github.io/posts/beagle_notes/#kernel-space-and-user-space) to understand what is the kernel and user space).
-* In the directory ``/sys/class/leds`` You can see the four (green!) LED sysfs mappings—`usr0`, `usr1`, `usr2`, and `usr3`.
-* More on this on _Pg. 89 Chap 2:Beagle Software_ in the book _Exploring BeagleBone. Tools and Techniques for Building with Embedded Linux by Derek Molloy_ .  
+Bela is ideal for creating anything interactive that uses sensors and sound. So far, Bela has been used to create:
+- musical instruments and audio effects
+- kinetic sculptures
+- wearable devices
+- interactive sound installations
+and many more applications that are listed [here](https://learn.bela.io/get-started-guide/say-hello-to-bela/#what-is-bela)
 
-## Embedded Linux Systems <a name="Embedded-Linux-Systems"></a>
-Some good Documentation has been done here: https://satacker.github.io/posts/beagle_notes/, so do read it as well, incase I miss anything.
+**Why** add support for BBAI/newer TI chips? <br>
 
-### Bootloaders <a name="bootloaders"></a>
-The Beagle boards use an open source Linux bootloader, called Das U-Boot(“The” Universal Bootloader). (see _Pg 101 Chap3_ for further details on this) .
+The Beagle Black was launched over 7 years ago in 2013 and newer and better TI Sitara Processors have been launched ever since. It would be better to have a more standardized setup that allows an easier jump across TI chips. Soon, newer boards with different and more efficient chips like the AM5X and the TI C66x digital-signal-processor (DSP) cores in the BBAI are coming up that will need to be compatible with the Bela Software and Hardware.
+<br>
+Programming languages and tools to be used:
 
-### Kernel Space and User Space <a name="kernel-and-user-space"></a>
-This topic has already been covered under [beagle_notes](https://satacker.github.io/posts/beagle_notes/), So I will not go into much depth.
+_C, C++, PRU, dtb, GNU Make, ARM Assembly_
 
-## Practical Beagle Board Programming <a name="Board-Programming"></a>
-CHAP5: TODO
+## Implementation Details
+The hardware was partially working on the BBAI using only ALSA([Advanced Linux Sound Architecture](https://en.wikipedia.org/wiki/Advanced_Linux_Sound_Architecture)) and the SPI driver [1](https://github.com/giuliomoro/beaglebone-ai-bela). However, the Bela real-time code on ARM and PRU was not running on the BBAI yet.<br>
+This project involved dealing with pinmuxing (using overlays), PRU assembly, C and C++ for Linux user space applications. Also studied the Technical Reference Manual for the Sitara family of SoCs. ([AM5729](https://www.ti.com/lit/ug/spruhz6l/spruhz6l.pdf)  and the AM335x).
 
-## Interfacing to the Beagle Board <a name="Interfacing"></a>
-### Interfacing to the Beagle Board I/Os <a name="ios"></a>
-CHAP5: TODO
-### Interfacing to the Beagle Board Buses <a name="buses"></a>
-CHAP6: TODO
+### Background
 
-### Real-Time Interfacing with the PRU-ICSS <a name="PRU"></a>
+**What is RProc?** <br>
+The remoteproc framework allows different platforms/architectures to
+control (power on, load firmware, power off) those remote processors while
+abstracting the hardware differences, so the entire driver doesn't need to be
+duplicated. In addition, this framework also adds rpmsg virtio devices
+for remote processors that supports this kind of communication. This way,
+platform-specific remoteproc drivers only need to provide a few low-level
+handlers <br>
+Reference: [kernel.org](https://www.kernel.org/doc/Documentation/remoteproc.txt)
 
-The Programmable Real-Time Unit and Industrial Communication Subsystem (PRU-ICSS) on the Beagle board’s AM57X SoC contains
-- Two 32-bitload/store RISC CPU cores- _Programmable Real-Time Units_(PRU0and PRU1).
-- 12-KiB program RAM and 8-KiB data RAM per PRU CPU.
-- 21 Enhanced General-Purpose Inputs (EGPI) and 21 Enhanced General-Purpose Outputs(EGPO)
-- **Interrupt controller (INTC)**: An interrupt controller can be used to notify each PRU that an event has occurred or to notify the host device of events.
-- **Scratch pad (SPAD)**: This provides three banks of 30 × 32-bit registers that are shared between the two PRU cores.
-- **UART0**: A UART device with a dedicated 192 MHz clock is available on the Beagle board headers.    
-The Architecture: \
-![image](https://user-images.githubusercontent.com/41233856/116785977-0b96c000-aaba-11eb-8bc7-692d863cfe4e.png) \
-Courtesy of the Ti AM572x SRM.
+**What is a Device Tree Overlay?**
+Sometimes it is not convenient to describe an entire system with a
+single FDT(Flattened Device Tree). For example, processor modules that are plugged into one or
+more modules (a la the BeagleBone), or systems with an FPGA peripheral
+that is programmed after the system is booted.
+For these cases it is proposed to implement an overlay feature
+so that the initial device tree data can be modified by userspace at
+runtime by loading additional overlay FDTs that amend the original data.
+<br>
+**Pinmuxing**
+The following pin diagram <br>
+![](https://www.mathworks.com/help/supportpkg/beagleboneio/ug/beaglebone_black_pinmap.png) <br> from a mathworks forum aided greatly to help visualize and compare the pins on the BeagleBone black versus the BeagleBone AI. <br>
+Also, inorder to write a DTO using CCL, I referred [am572x-bone-common-univ.dtsi](https://github.com/DhruvaG2000/BeagleBoard-DeviceTrees/blob/v4.19.x-ti-overlays/src/arm/am572x-bone-common-univ.dtsi) which helps one understand the names and references to the pinmuxes.
 
-### The Remote Processor Framework <a name="remoteproc"></a>
-It allows a main processor that is running Linux to control the slave processors via OS device bindings.
-Example:
-First, I suggest you navigate to `/dev/remoteproc/pruss1-core0` as su. Then, try the following <br>
-```sh
-$ echo 'stop' > state   # this will stop the PRU
-$ cat state
-> offline
-$ echo 'am57xx-pru1_0-fw' > firmware  # Refer below for the actual location
-$ echo 'start' > state
-$ cat state
-> running   #This will again start the PRU1_core 0
-```
-In this example, PRU0 is controlled, and the firmware from the ``/lib/firmware/am57xx-pru1_0-fw`` file is loaded into the PRU.
-**note:** The PRU must be stopped before you can write new PRU programs.
+<br>
+**How is an overlay compiled?**<br>
+dtc (Device Tree Compiler) - converts between the human editable device tree source `dts` format and the compact device tree blob `dtb` representation usable by the kernel or assembler source. <br> Once an overlay is compiled, it generates a `.dtbo` file which we can then use in the next stage to load the overlay. <br>
+To know more on how to compile and load the overlay, just head over to [overlay-instructions](https://dhruvag2000.github.io/Blog-GSoC21/Bela/overlay-instructions.html).
 
-The [remoteproc framework](https://www.kernel.org/doc/html/latest/staging/remoteproc.html) allows different platforms/architectures to control (power on, load firmware, power off) those remote processors while abstracting the hardware differences, so the entire driver doesn’t need to be duplicated
+### Details of Implementation
 
-To see how RPROC headers will be used, goto BELA DOCUMENTATION/The Bela Code/ [PRU.cpp](https://dhruvag2000.github.io/Blog-GSoC21/Bela/syntax-notes.html)
+The places within the Bela core code that required intervention are:<br>
+1. The [Makefile](https://github.com/giuliomoro/Bela-dhruva/blob/BBAI-support/Makefile#L297): updated the workflow to build the PRU code for remoteproc. Also implemented auto-detection of which processor the code was being compiled on which was passed as a compile time flag to the BELA PRU and Core codes. <br>
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
-## References <a name="ref"></a>
-- My proposal: Bela compatibility for the BBAI: [proposal](https://elinux.org/BeagleBoard/GSoC/2021_Proposal/bela_on_bbai)
-- Official BBAI website: https://beagleboard.org/ai
-- [GNU Make](gnu-make-tutorial.md)
-- The PRU-ICSS Reference Guide: This document is the main reference for the PRU-ICSS hardware: tiny.cc/beagle1501
-- The PRU-ICSS Getting Started Guide on Linux: tiny.cc/beagle1502
-- The Processor Messaging Framework: tiny.cc/beagle1505
-- BBAI Pins: https://docs.google.com/spreadsheets/d/1fE-AsDZvJ-bBwzNBj1_sPDrutvEvsmARqFwvbw_HkrE/edit#gid=227990209 & [my copy](https://docs.google.com/spreadsheets/d/1h-oUVhZXogOkKJkq73dM1JPOzcslBfcdpxTx4fZ-Cg0/edit?usp=sharing)
-- Bela homepage: https://bela.io/
-- Robot Control Library: https://beagleboard.org/static/librobotcontrol/index.html  
-- [remoteproc framework](https://www.kernel.org/doc/html/latest/staging/remoteproc.html) and [BBB PRUSSv2](https://elinux.org/Ti_AM33XX_PRUSSv2)
-- [prussdrv.c](https://github.com/beagleboard/am335x_pru_package/blob/master/pru_sw/app_loader/interface/prussdrv.c)
+2. Developed [PruManager code](https://github.com/giuliomoro/Bela-dhruva/blob/BBAI-support/core/PruManager.cpp) which combines RProc and UIO PRUSS(using the libprussdrv API) implementation all under one roof. <br>
+**Transitioning from libprussdrv to rproc:**<br>
+	I initially believed that I needed to change the initialization code in [PRU.cpp](https://github.com/BelaPlatform/Bela/blob/master/core/PRU.cpp#L18) that is currently relying on `libprussdrv` and move to using `rproc`. I was not sure if rproc provides some functionalities to access the PRU's RAM the way `prussdrv_map_prumem()` used to, that essentially gives access to a previously mmap'ed area of memory. <br>
+	On the latest Bela code there's a `Mmap` class which can make this somehow simpler ([ref. here](http://docs.bela.io/classMmap.html)). <br>
+	For this transition, maintaining backward compatibility was also quite essential. This is what the `PruManager` class achieves. Below is a rough structure of the [class `PruManager`:](https://github.com/giuliomoro/Bela-dhruva/blob/BBAI-support/include/PruManager.h)<br>
+	- class PruManager // This is the abstract base class<br>
+	**Protected variables:** [see here](https://github.com/giuliomoro/Bela-dhruva/blob/BBAI-support/include/PruManager.h#L23-L26)<br>
+	**functions:**<br>
+		- `void stop();` as the name suggests, stops the PRU
+		- `int start(bool useMcaspIrq);` The first start is called by the `PRU.cpp` code where required, where `useMcaspIrq` is a flag that decides which pru code is to be used out of `pru_rtaudio.p` and `pru_rtaudio_irq.p`.
+		- `int start(const std::string& path);` The second start is called within the first one after the choice of PRU code is made. This function then does the job of loading the firmware file and starting the PRU.
+		- `void* getOwnMemory();` Each PRU has is own 8KB of data memory (Data Mem0 and Mem1) and 12KB of shared memory (Shared RAM). (ref. [prucookbook](https://beagleboard.org/static/prucookbook/#_memory_allocation))
+		- `void* getSharedMemory();` refer the DATA RAM2 (shared) block in the diagram below from the AM572x Ref. Manual<br>These last 2 functions are responsible for accessing the data memory and shared memory respectively.<br>![](photos/PRU-overview.png)
 
-## Additional Help <a name="help"></a>
-* [GNU Make](gnu-make-tutorial.md)
+	The classes below are children of the above `PruManager` virtual base class.
+	- `class PruManagerRprocMmap` is responsible for RProc implementation.
+	The RProc Mmap class is named so, because we are also using the `Mmap.h` header mentioned above to access `/dev/mem` on the BeagleBones to read or write to desired global memory locations.<br>
+	This class currently has been tested only on the AM572x processor (_ie. the BBAI_).
+	- `class PruManagerUio` is basically a ditto implementation of the `libprussdrv` approach that was being used earlier. This class is mainly useful to maintain backward compatibility with v4.14 on the BBB+Bela. It _does not_ support the AM572x processor.
+	- The Makefile passes the flags `ENABLE_PRU_RPROC` which tells the core/codes to use the RProc implementation _or else_ `ENABLE_PRU_UIO` tells the core/codes to keep using the old `libprussdrv` implementation.
+
+3. **PRU Codes:** In `pru/pru_rtaudio.p` the hard-coded McASP, SPI and GPIO constants were replaced with board-dependent ones using `board_specific.h`.<br>
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+4. Other places like `Gpio.cpp`, `bela_hw_settings.h`, and a few other codes also needed updating the base addresses for including the new AM572x constants.<br>
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+<br>
+
+I also wrote 2 device tree overlays using the CCL,<br>
+1. [BBAI-AUDI-02-00A0:](https://github.com/beagleboard/BeagleBoard-DeviceTrees/blob/v4.19.x-ti-overlays/src/arm/overlays/BBAI-AUDI-02-00A0.dts) which essentially helps ALSA detect the BELA Cape as an audio device and you can play audio files with it using the command `aplay`.
+2. [BBAI-BELA-00A1.dts:](https://github.com/DhruvaG2000/BeagleBoard-DeviceTrees/blob/v4.19.x-ti-overlays/src/arm/overlays/BBAI-BELA-00A1.dts) It helps set the right pinmux for the I2C, SPI, GPIO, etc. for them all to work correctly.
+<br>
+
+and, I also ported a debugger for PRU called [PRUDebug](https://github.com/giuliomoro/prudebug/tree/master) to the BBAI.
+
+
+
+## Achieved Milestones
+
+1. Created a device tree overlay using [Cape Compatibility layer](https://elinux.org/Beagleboard:BeagleBone_cape_interface_spec) to port [BB-BONE-AUDI](https://github.com/beagleboard/bb.org-overlays/blob/master/src/arm/BB-BONE-AUDI-02-00A0.dts) overlay to the BBAI. <br>
+The Overlay I wrote has been accepted by BeagleBone maintainer Robert Nelson, and you can find it to [here](https://github.com/beagleboard/BeagleBoard-DeviceTrees/blob/v4.19.x-ti-overlays/src/arm/overlays/BBAI-AUDI-02-00A0.dts)
+
+2. Created a [BBAI-BELA-00A1 device tree overlay](https://github.com/DhruvaG2000/BeagleBoard-DeviceTrees/blob/v4.19.x-ti-overlays/src/arm/overlays/BBAI-BELA-00A1.dts) which helps in setting the right pinmux for BELA.
+
+3. Adapted to the Bela PRU and ARM code and workflow to use the PRU using the [Remote Processor Framework](https://www.kernel.org/doc/Documentation/remoteproc.txt) and provide backward compatibility to the _almost_ outdated UIO PRUSS depending on the board it is compiled on.
+<br>Associated files: <br>
+	- [PruManager.cpp](https://github.com/DhruvaG2000/Bela/blob/BBAI-support/core/PruManager.cpp)
+	- [Prumanager.h](https://github.com/DhruvaG2000/Bela/blob/BBAI-support/include/PruManager.h)
+
+4. Updated the Bela code to use the McASP, GPIO and McSPI on the AM5729 SoC of the BBAI
+<br>Associated Files: <br>
+	- [pru code](https://github.com/DhruvaG2000/Bela/blob/BBAI-support/pru/board_specific.h)
+
+5. Installed a Xenomai patched kernel and ran the full Bela stack.
+
+6. I also ported a debugger for PRU called [PRUDebug](https://github.com/giuliomoro/prudebug/tree/master) to work on both the PRUSS on board the AM5792.
+<br>Associated Files:
+	- [prudbg.h](https://github.com/giuliomoro/prudebug/blob/master/prudbg.h)
+	- [prudbg.c](https://github.com/giuliomoro/prudebug/blob/master/prudbg.c)
+
+
+## Pull Requests
+
+1. [beagleboard/BeagleBoard-DeviceTrees BBAI-AUDI-02-00A0 overlay using the CCL #33](https://github.com/beagleboard/BeagleBoard-DeviceTrees/pull/33)
+
+2. [BBAI-AUDI-02-00A0.dts: Solved the output audio frequency issue #36 ](https://github.com/beagleboard/BeagleBoard-DeviceTrees/pull/36)
+
+3. [cloud9-examples Corrected: solved a compilation issue #57 ](https://github.com/beagleboard/cloud9-examples/pull/57)
+
+4. [Bela: PruManager Rproc + MMap/ prussdrv+UIO implementation](https://github.com/giuliomoro/Bela-dhruva/pull/1)
+
+5. [giuliomoro/prudebug: Add support for AM57x #2](https://github.com/giuliomoro/prudebug/pull/2)
+
+6. [MarkAYoder/BeagleBoard-exercises: prudebug: Add BBAI support #7](https://github.com/MarkAYoder/BeagleBoard-exercises/pull/7)
+
+7. [Bela: Add support for BeagleBone AI #668](https://github.com/BelaPlatform/Bela/pull/668)
+
+
+## Project Shortcomings
+
+Due to the introduction of a new concept called `IRQ_CROSSBAR` for handling interrupts from peripherals in the AM572x chips, porting the existing codes from BELA that use interrupts proved to be a bit complicated.<br>
+After going through the AM572x manual, [a workflow](https://dhruvag2000.github.io/Blog-GSoC21/pru-icss.html#18464-irq_crossbar-module-functional-description) was suggested. However on testing this workflow there still seem to be a few steps missing.
+
+Essentially what we were trying to achieve was McASP --> PRU interrupts like there were in the [pru_rtaudio_irq.p](https://github.com/DhruvaG2000/Bela/blob/BBAI-support/pru/pru_rtaudio_irq.p) code.
+
+Materials referred were: [AM572x sitara manual](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwjen9DJ86XyAhVKbn0KHYyaCnwQFnoECAIQAQ&url=https%3A%2F%2Fwww.ti.com%2Flit%2Fug%2Fspruhz6l%2Fspruhz6l.pdf&usg=AOvVaw1H4iD_SzEGYNYlj70bZ9Wk) and
+[PRU-ICSS Migration Guide](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwjRj-rU86XyAhVbfisKHfQqBskQFnoECAIQAQ&url=http%3A%2F%2Fwww.ti.com%2Flit%2Fan%2Fsprac91%2Fsprac91.pdf&usg=AOvVaw1vtNHcqojXO6uuCUOtYzwp)
+
+**TLDR of shortcomings:**
+- Xenomai patched kernel (Linux beaglebone 4.19.94-ti-xenomai-r64) crashes on boot, and the board needs to be reset a couple of times to properly boot.
+- The interrupts in AM572x turned out to be much complicated than AM335x due to a new concept called `IRQ_CROSSBARS` which me and the Bela team have been working on for a few days. This may take some more time to implement. (however, this shouldn't be much of a deal-breaker for most users)
+- The ARM --> PRU and vice versa interrupts are also yet to be implemented as the driver [rtdm_pruss_irq](https://github.com/BelaPlatform/rtdm_pruss_irq) could not be easily ported by just changing the [BASE ADDRESS](https://github.com/BelaPlatform/rtdm_pruss_irq/blob/master/rtdm_pruss_irq.c#L13)
