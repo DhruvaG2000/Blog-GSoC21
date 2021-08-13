@@ -224,6 +224,18 @@ Materials referred were: [AM572x sitara manual](https://www.google.com/url?sa=t&
 - The interrupts in AM572x turned out to be much complicated than AM335x due to a new concept called `IRQ_CROSSBARS` which me and the Bela team have been working on for a few days. This may take some more time to implement. (however, this shouldn't be much of a deal-breaker for most users)
 - The ARM --> PRU and vice versa interrupts are also yet to be implemented as the driver [rtdm_pruss_irq](https://github.com/BelaPlatform/rtdm_pruss_irq) could not be easily ported by just changing the [BASE ADDRESS](https://github.com/BelaPlatform/rtdm_pruss_irq/blob/master/rtdm_pruss_irq.c#L13)
 
+## Benefit
+
+If successfully completed, this project will add support for the Bela cape + Xenomai + PRU on the BeagleBone AI, and also the code will be easier to port to other Texas Instruments systems-on-chip.
+
+> By going through the steps needed to have the Bela environment running on BBAI, we will go through refactoring and rationalization, using mainline drivers and APIs where possible. This will make Bela easier to maintain and to port to new platforms, benefiting the project's longevity and allowing it to expand its user base.
+
+-Giulio Moro
+
+> Just ordered a Bela cape. The platform seems really cool and exactly what I was looking for :) Just thought I would add that, I would also be very interested in having a bit more processing power under the hood and the ai would definitely be enough for my purposes.
+
+- A User on Bela Forum
+
 ## References
 
 1. [BBAI System-Reference-Manual](https://github.com/beagleboard/beaglebone-ai/wiki/System-Reference-Manual)
