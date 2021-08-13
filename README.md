@@ -79,6 +79,20 @@ Also, inorder to write a DTO using CCL, I referred [am572x-bone-common-univ.dtsi
 **How is an overlay compiled?**<br>
 dtc (Device Tree Compiler) - converts between the human editable device tree source `dts` format and the compact device tree blob `dtb` representation usable by the kernel or assembler source. <br> Once an overlay is compiled, it generates a `.dtbo` file which we can then use in the next stage to load the overlay. <br>
 To know more on how to compile and load the overlay, just head over to [overlay-instructions](https://dhruvag2000.github.io/Blog-GSoC21/Bela/overlay-instructions.html).
+<br>
+**XENOMAI kernel**<br>
+Xenomai is a Free Software project in which engineers from a wide background collaborate to build a robust and resource-efficient real-time core for Linux© following the dual kernel approach, for applications with stringent latency requirements.
+
+Xenomai kernel (`v4.19.94-ti-xenomai-r64`) has been built and tested on the BBAI with a few minor bugs. I have installed the xenomai kernel through the default procedure to update kernel and libraries which I have documented [here](https://dhruvag2000.github.io/Blog-GSoC21/xenomai/install.html). I have successfully built the entire Bela core code without needing to modify any xenomai dependant syntax.
+
+**Hardware used**<br>
+Hardware required:
+The hardware listed below was used for testing if my code implementation works correctly.
+1. BeagleBone AI.
+2. Bela cape: [The original Bela board](https://shop.bela.io/bela).
+3. LA104 Logic Analyzer (helped me to debug McASP clock)
+4. LEDs, jumper wires, Multimeter, etc.
+5. A Fan Cape
 
 ### Details of Implementation
 
