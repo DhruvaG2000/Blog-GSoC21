@@ -221,3 +221,13 @@ Materials referred were: [AM572x sitara manual](https://www.google.com/url?sa=t&
 - Xenomai patched kernel (Linux beaglebone 4.19.94-ti-xenomai-r64) crashes on boot, and the board needs to be reset a couple of times to properly boot.
 - The interrupts in AM572x turned out to be much complicated than AM335x due to a new concept called `IRQ_CROSSBARS` which me and the Bela team have been working on for a few days. This may take some more time to implement. (however, this shouldn't be much of a deal-breaker for most users)
 - The ARM --> PRU and vice versa interrupts are also yet to be implemented as the driver [rtdm_pruss_irq](https://github.com/BelaPlatform/rtdm_pruss_irq) could not be easily ported by just changing the [BASE ADDRESS](https://github.com/BelaPlatform/rtdm_pruss_irq/blob/master/rtdm_pruss_irq.c#L13)
+
+## References
+
+1. [BBAI System-Reference-Manual](https://github.com/beagleboard/beaglebone-ai/wiki/System-Reference-Manual)
+2. [AM572x Sitara Processor Technical Reference Manual (Rev. L)](https://www.ti.com/lit/ug/spruhz6l/spruhz6l.pdf)
+3. [AM335x and AMIC110 Sitara™ Processors Technical Reference Manual](https://www.ti.com/lit/ug/spruh73q/spruh73q.pdf)
+4. [BB.org forum](https://forum.beagleboard.org/t/bela-support-for-bbai-later-ti-chips/29257)
+5. [kernel.org/remoteproce](https://www.kernel.org/doc/html/latest/staging/remoteproc.html)
+6. [Xenomai Wiki](https://source.denx.de/Xenomai/xenomai/-/wikis/Installing_Xenomai_3#library-install)
+7. [GNU Make Manual](https://www.gnu.org/software/make/manual/make.html)
