@@ -14,6 +14,7 @@ This project has been done as part of Google Summer of Code 2021 with the Beagle
 - _Youtube_:
 	- An Introductory video([click here to view](https://www.youtube.com/watch?v=aVLRUyPBBJk)) has been made to explain the project outline.<br>
 	- A small demonstration of the Trill Bar being played with Bela Cape on the BBAI: [click here](https://youtu.be/AiqcA5NhkvM).
+- _Bela AI image_: [download belaAI.img.xz from here](https://github.com/DhruvaG2000/Bela/releases/tag/v1.0) to readily get started easily with Bela on BBAI.
 
 ## Introduction
 As given on the [official website](https://learn.bela.io/get-started-guide/say-hello-to-bela/#what-is-bela), Bela is a hardware and software system for creating beautiful interaction with sensors and sound.<br>
