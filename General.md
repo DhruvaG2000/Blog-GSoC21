@@ -50,6 +50,10 @@ where,
 - count= is the size u want your bkp image to be, it is in MB
 - status= shows you the live status
 
+I followed this procedure to make the release Bela on BBAI image:
+- `sudo dd if=/dev/sdd of=gsoc21/bkps/belaAI.img bs=1M status=progress count=3462` for a 3.5GB SD Card image.
+- Then, to compress `xz -k -9 -v belaAI.img`
+
 ## PRU
 
 Refer the image below to see the IO pins to the PRU in the BeagleBone black (taken from [here](https://beagleboard.org/static/presentations/MakerFaireNY20140920_UsingBeagleBoneRealTimeMicrocontrollers.pdf) ) <br>
@@ -123,6 +127,10 @@ If you get that output to `cat` then the firmware has been loaded and is up and 
 - loading firmware onto the PRU
 - accessing the PRU via remoteproc and rpmesg handles
 - writing your own programs for the PRU using the pru-software-support-package.
+
+## CPU Speed
+
+To boost the CPU speed, use `sudo cpupower frequency-set -d 1.5GHz -u 1.5GHz`. Remember to install a fan or fan cape before that so your BBAI does not over heat!
 
 ## Keywords
 
