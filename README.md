@@ -160,8 +160,8 @@ This class is currently being used only on the AM572x processor (_ie. the BBAI_)
 <br>
 
 2 device tree overlays were also created using the CCL,<br>
-1. [BBAI-AUDI-02-00A0:](https://github.com/beagleboard/BeagleBoard-DeviceTrees/blob/v4.19.x-ti-overlays/src/arm/overlays/BBAI-AUDI-02-00A0.dts) which essentially helps ALSA detect the BELA Cape as an audio device and you can play audio files with it using the command `aplay`.
-2. [BBAI-BELA-00A1.dts:](https://github.com/DhruvaG2000/BeagleBoard-DeviceTrees/blob/v4.19.x-ti-overlays/src/arm/overlays/BBAI-BELA-00A1.dts) It helps set the right pinmux for the I2C, SPI, GPIO, etc. for them all to work correctly.
+1. [BBAI-AUDI-02-00A0:](https://github.com/beagleboard/BeagleBoard-DeviceTrees/blob/v4.19.x-ti-overlays/src/arm/overlays/BBAI-AUDI-02-00A0.dts) which essentially helps ALSA detect the BELA Cape as an audio device and you can play audio files with it using the command `aplay`.<br>It is a port of [BB-BONE-AUDI-02-00A0.dts](https://github.com/beagleboard/bb.org-overlays/blob/master/src/arm/BB-BONE-AUDI-02-00A0.dts)
+2. [BBAI-BELA-00A1.dts:](https://github.com/DhruvaG2000/BeagleBoard-DeviceTrees/blob/v4.19.x-ti-overlays/src/arm/overlays/BBAI-BELA-00A1.dts) It helps set the right pinmux for the I2C, SPI, GPIO, etc. for them all to work correctly.<br>This is a port of the [BB-BELA-00A1.dts](https://github.com/BelaPlatform/bb.org-overlays/blob/master/src/arm/BB-BELA-00A1.dts)
 <br>
 
 and, a debugger for PRU called [PRUDebug](https://github.com/giuliomoro/prudebug/tree/master) was ported to the BBAI.
