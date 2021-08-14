@@ -153,19 +153,20 @@ This class is currently being used only on the AM572x processor (_ie. the BBAI_)
 - `class PruManagerUio` is basically a ditto implementation of the `libprussdrv` approach that was being used earlier. This class is mainly useful to maintain backward compatibility with v4.14 on the BBB+Bela. It _does not_ support the AM572x processor.
 - The Makefile passes the flags `ENABLE_PRU_RPROC` which tells the core/codes to use the RProc implementation _or else_ `ENABLE_PRU_UIO` tells the core/codes to keep using the old `libprussdrv` implementation.
 
-3. **PRU Codes:** In `pru/pru_rtaudio.p` the hard-coded McASP, SPI and GPIO constants were replaced with board-dependent ones using `board_specific.h`.<br>
+#### PRU Codes:
+In `pru/pru_rtaudio.p` the hard-coded McASP, SPI and GPIO constants were replaced with board-dependent ones using `board_specific.h`.<br>
 `pru/board_specific.h` uses the `IS_AM572x` to set the proper BASE constants depending on which board it is compiling on. The GPIO, `CLOCK_MCASP1`, MCASP1, `CLOCK_SPI2`, SPI2, and a few other Base Addresses needed changing in the AM572x. For more details [visit my PR](https://github.com/BelaPlatform/Bela/pull/669/files).
 
-4. Other places like `Gpio.cpp`, `bela_hw_settings.h`, and a few other codes also needed updating the base addresses for including the new AM572x constants. Those changes can also be viewed all at once [here](https://github.com/BelaPlatform/Bela/pull/669/files).
-<br>
+#### Minor Changes
+Other places like `Gpio.cpp`, `bela_hw_settings.h`, and a few other codes also needed updating the base addresses for including the new AM572x constants. Those changes can also be viewed all at once [here](https://github.com/BelaPlatform/Bela/pull/669/files).
 
+#### Device Tree Overlays
 2 device tree overlays were also created using the CCL,<br>
 1. [BBAI-AUDI-02-00A0:](https://github.com/beagleboard/BeagleBoard-DeviceTrees/blob/v4.19.x-ti-overlays/src/arm/overlays/BBAI-AUDI-02-00A0.dts) which essentially helps ALSA detect the BELA Cape as an audio device and you can play audio files with it using the command `aplay`.<br>It is a port of [BB-BONE-AUDI-02-00A0.dts](https://github.com/beagleboard/bb.org-overlays/blob/master/src/arm/BB-BONE-AUDI-02-00A0.dts)
 2. [BBAI-BELA-00A1.dts:](https://github.com/DhruvaG2000/BeagleBoard-DeviceTrees/blob/v4.19.x-ti-overlays/src/arm/overlays/BBAI-BELA-00A1.dts) It helps set the right pinmux for the I2C, SPI, GPIO, etc. for them all to work correctly.<br>This is a port of the [BB-BELA-00A1.dts](https://github.com/BelaPlatform/bb.org-overlays/blob/master/src/arm/BB-BELA-00A1.dts)
-<br>
+
 
 and, a debugger for PRU called [PRUDebug](https://github.com/giuliomoro/prudebug/tree/master) was ported to the BBAI.
-
 
 
 ## Achieved Milestones
