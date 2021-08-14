@@ -235,7 +235,7 @@ This project adds support for the Bela cape + Xenomai + PRU on the BeagleBone AI
 
 > Just ordered a Bela cape. The platform seems really cool and exactly what I was looking for :) Just thought I would add that, I would also be very interested in having a bit more processing power under the hood and the ai would definitely be enough for my purposes.
 
-- A User on Bela Forum
+-A User on Bela Forum
 
 ## References
 
