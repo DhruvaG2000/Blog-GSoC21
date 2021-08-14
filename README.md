@@ -222,7 +222,7 @@ Materials referred were: [AM572x sitara manual](https://www.google.com/url?sa=t&
 **TLDR of shortcomings:**
 - Xenomai patched kernel (Linux beaglebone 4.19.94-ti-xenomai-r64) crashes on boot, and the board needs to be reset a couple of times to properly boot.
 - The interrupts in AM572x turned out to be much complicated than AM335x due to a new concept called `IRQ_CROSSBARS` which me and the Bela team have been working on for a few days. This may take some more time to implement. (however, this shouldn't be much of a deal-breaker for most users)
-- The ARM --> PRU and vice versa interrupts are also yet to be implemented as the driver [rtdm_pruss_irq](https://github.com/BelaPlatform/rtdm_pruss_irq) could not be easily ported by just changing the [BASE ADDRESS](https://github.com/BelaPlatform/rtdm_pruss_irq/blob/master/rtdm_pruss_irq.c#L13)
+- The PRU --> ARM interrupts are also yet to be implemented as the driver [rtdm_pruss_irq](https://github.com/BelaPlatform/rtdm_pruss_irq) could not be easily ported by just changing the [BASE ADDRESS](https://github.com/BelaPlatform/rtdm_pruss_irq/blob/master/rtdm_pruss_irq.c#L13)
 
 ## Benefit
 
