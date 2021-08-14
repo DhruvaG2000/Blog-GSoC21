@@ -19,8 +19,8 @@ This project has been done as part of Google Summer of Code 2021 with the Beagle
 ## Introduction
 As given on the [official website](https://learn.bela.io/get-started-guide/say-hello-to-bela/#what-is-bela), Bela is a hardware and software system for creating beautiful interaction with sensors and sound.<br>
 Bela has a lot of analog and digital inputs and outputs for hooking up sensors and controlling other devices, and most importantly Bela has _stereo audio i/o_  allowing you to interact with the world of sound. <br>
-Both Bela systems use the same Bela software. It uses a customized Debian distribution which - most notably - uses a _Xenomai kernel_ instead of a stock kernel. _Xenomai_ is _co-kernel_ for Linux which allows to achieve hard ___real-time performance___ on Linux machines ([ref: xenomai.org](http://xenomai.org/)). It thus takes advantage of features of the BeagleBone computers and can achieve extremely fast audio and sensor processing times. <br>
-Although the proposal Title mentions support for AI, I will try to develop a standardized setup that allows an easy jump across all TI chips.
+All Bela systems so far use the same Bela software. It uses a customized Debian distribution which - most notably - uses a _Xenomai kernel_ instead of a stock kernel. _Xenomai_ is _co-kernel_ for Linux which allows to achieve hard ___real-time performance___ on Linux machines ([ref: xenomai.org](http://xenomai.org/)). It thus takes advantage of features of the BeagleBone computers and can achieve extremely low-latency audio and sensor processing times. <br>
+Although the proposal Title mentions support for AI, I have developed a standardized setup that allows an easy jump across all TI chips.
 
 **Bela and BB**
 <br>
@@ -49,8 +49,8 @@ Programming languages and tools to be used:
 _C, C++, PRU, dtb, GNU Make, ARM Assembly_
 
 ## Implementation Details
-The hardware was partially working on the BBAI using only ALSA([Advanced Linux Sound Architecture](https://en.wikipedia.org/wiki/Advanced_Linux_Sound_Architecture)) and the SPI driver [1](https://github.com/giuliomoro/beaglebone-ai-bela). However, the Bela real-time code on ARM and PRU was not running on the BBAI yet.<br>
-This project involved dealing with pinmuxing (using overlays), PRU assembly, C and C++ for Linux user space applications. Also studied the Technical Reference Manual for the Sitara family of SoCs. ([AM5729](https://www.ti.com/lit/ug/spruhz6l/spruhz6l.pdf)  and the AM335x).
+The hardware was partially working on the BBAI using only ALSA([Advanced Linux Sound Architecture](https://en.wikipedia.org/wiki/Advanced_Linux_Sound_Architecture)) and the SPI driver [(refer)](https://github.com/giuliomoro/beaglebone-ai-bela). However, the Bela real-time code on ARM and PRU was not running on the BBAI yet.<br>
+This project involved dealing with pinmuxing (using overlays), PRU assembly, C and C++ for Linux user space applications and I also had to study the Technical Reference Manual of the Sitara family of SoCs. ([AM5729](https://www.ti.com/lit/ug/spruhz6l/spruhz6l.pdf)  and the AM335x).
 
 ### Background
 
@@ -71,18 +71,18 @@ more modules (a la the BeagleBone), or systems with an FPGA peripheral
 that is programmed after the system is booted.
 For these cases it is proposed to implement an overlay feature
 so that the initial device tree data can be modified by userspace at
-runtime by loading additional overlay FDTs that amend the original data.
-<br>
+runtime by loading additional device tree overlays that amend the original data.
+
+
 **Pinmuxing**
 The following pin diagram <br>
 ![](https://www.mathworks.com/help/supportpkg/beagleboneio/ug/beaglebone_black_pinmap.png) <br> from a mathworks forum aided greatly to help visualize and compare the pins on the BeagleBone black versus the BeagleBone AI. <br>
-Also, inorder to write a DTO using CCL, I referred [am572x-bone-common-univ.dtsi](https://github.com/DhruvaG2000/BeagleBoard-DeviceTrees/blob/v4.19.x-ti-overlays/src/arm/am572x-bone-common-univ.dtsi) which helps one understand the names and references to the pinmuxes.
+Also, inorder to write a DTO(Device Tree Overlay) using CCL([Cape Compatibility Layer](https://deepaklorkhatri.me/GSoC2020_BeagleBoard.org/)), I referred [am572x-bone-common-univ.dtsi](https://github.com/DhruvaG2000/BeagleBoard-DeviceTrees/blob/v4.19.x-ti-overlays/src/arm/am572x-bone-common-univ.dtsi) which helps one understand the names and references to the pinmuxes.
 
-<br>
 **How is an overlay compiled?**<br>
-dtc (Device Tree Compiler) - converts between the human editable device tree source `dts` format and the compact device tree blob `dtb` representation usable by the kernel or assembler source. <br> Once an overlay is compiled, it generates a `.dtbo` file which we can then use in the next stage to load the overlay. <br>
+`dtc`(Device Tree Compiler) - converts between the human editable device tree source `dts` format and the compact device tree blob `dtb` representation usable by the kernel or assembler source. <br> Once an overlay is compiled, it generates a `.dtbo` file which we can then use in the next stage to load the overlay. <br>
 To know more on how to compile and load the overlay, just head over to [overlay-instructions](https://dhruvag2000.github.io/Blog-GSoC21/Bela/overlay-instructions.html).
-<br>
+
 **XENOMAI kernel**<br>
 Xenomai is a Free Software project in which engineers from a wide background collaborate to build a robust and resource-efficient real-time core for Linux© following the dual kernel approach, for applications with stringent latency requirements.
 
@@ -100,7 +100,8 @@ The hardware listed below was used for testing if my code implementation works c
 ### Details of Implementation
 
 The places within the Bela core code that required intervention are:<br>
-1. The [**Makefile:**](https://github.com/giuliomoro/Bela-dhruva/blob/BBAI-support/Makefile#L297) Addition of `IS_AM572x` flag that is set automatically `1` on the BBAI and not set in BBB.
+#### The [**Makefile:**](https://github.com/giuliomoro/Bela-dhruva/blob/BBAI-support/Makefile#L297)
+Addition of `IS_AM572x` flag that is set automatically `1` on the BBAI and not set in BBB.
 Updated the workflow to build the PRU code for remoteproc. Also implemented auto-detection of which processor the code was being compiled on which was passed as a compile time flag to the BELA PRU and Core codes. <br>
 New flags and their brief description:<br>
 
@@ -114,45 +115,43 @@ New flags and their brief description:<br>
 | `firmwareBelaRProcMcaspxxxx` 	| `build/pru/pru_rtaudio_irq.out` 	| useful mainly with RProc for passing `.out` file path of _McASP IRQ PRU_ code to `PruManager`	|
 
 **Workflow to build pasm code**<br>
-Since pasm is outdated, we disassembled the binary generated by pasm and then re-compiled it with clpru to get the necessary `.out` files required by RProc to load fw into the PRU. The workflow was as follows: <br>
 
-	- Build the asm code normally using `pasm -V2 -L -c -b`.
-	- Use the disassembler Giulio Moro put together hacking the one that was inside prudebug. (Find it [here](https://github.com/giuliomoro/prudebug/tree/disassembler). (Note: A disassembler is a computer program that translates machine language into assembly language). <br>
-	Process the bin through the disassembler and make it ready to be included in `resources/rproc-build/rproc-template.c` as an __asm__ directive (i.e.: add quotes and prepend a space at the beginning of each line):<br>
+Although pasm is outdated, the binary it generates is still valid for the PRU. The issue is with the fact that it does not generate a file ready to be packaged up as a valid `.out` ELF which remoteproc would recognise and load as fw into the PRU.<br>To solve this issue, we came up with the following workflow to build the PRU Firmware to be used by RProc:
+- Build the asm code normally using `pasm -V2 -L -c -b`.
+- Use the disassembler Giulio Moro put together hacking the one that was inside prudebug. (Find it [here](https://github.com/giuliomoro/prudebug/tree/disassembler). (Note: A disassembler is a computer program that translates machine language into assembly language). <br>
+	Process the bin through the disassembler and make it ready to be included in `resources/rproc-build/rproc-template.c` as an `__asm__` directive (i.e.: add quotes and prepend a space at the beginning of each line):<br>
 	`prudis $< | sed 's/^\(.*\)$$/" \1\\n"/' > $(RPROC_INCLUDED_ASSEMBLY)`
-	- build the `.c` file mentioned above with the regular clpru toolchain. <br>
+- build the `.c` file mentioned above with the regular clpru toolchain. <br>
 	`clpru -fe $(RPROC_TMP_FILE).o $(RPROC_TEMPLATE) -v3 --endian=little --include_path=$(RPROC_BUILD_DIR) --include_path=$(RPROC_INCLUDE) --include_path=/usr/lib/ti/pru-software-support-package/include`
-	- link the programs using `lnkpru -o $(RPROC_TMP_FILE).out $(RPROC_TMP_FILE).o --stack_size=0x0 --heap_size=0x0 -m $(RPROC_TMP_FILE).map $(RPROC_CMD)`
-	- clpru seems to meddle with the `QBA`/`QBBx` instructions in there, so in the `dd` step<br>
+- link the programs using `lnkpru -o $(RPROC_TMP_FILE).out $(RPROC_TMP_FILE).o --stack_size=0x0 --heap_size=0x0 -m $(RPROC_TMP_FILE).map $(RPROC_CMD)`
+- clpru seems to meddle with the `QBA`/`QBBx` instructions in there, so in the `dd` step<br>
 	`dd if=$< of=$(RPROC_TMP_FILE).out bs=1 obs=1 seek=52 conv=notrunc status=none` <br>
 	we actually replace all the code generated by clpru with the original `.bin` that had been created by `pasm`.
 
-Thus, with the help of above workflow we were able to avoid re-writing the entire PRU assembly codes in `gcc` or `clpru` supported assembly syntax.
+#### Developed [PruManager code](https://github.com/giuliomoro/Bela-dhruva/blob/BBAI-support/core/PruManager.cpp)
+PruManager enables RProc and UIO PRUSS(using the libprussdrv API) implementation all under one roof.
 
+**Transitioning from libprussdrv to rproc:**
 
-2. Developed [PruManager code](https://github.com/giuliomoro/Bela-dhruva/blob/BBAI-support/core/PruManager.cpp) which combines RProc and UIO PRUSS(using the libprussdrv API) implementation all under one roof. <br>
-**Transitioning from libprussdrv to rproc:**<br>
-	I initially believed that I needed to change the initialization code in [PRU.cpp](https://github.com/BelaPlatform/Bela/blob/master/core/PRU.cpp#L18) that is currently relying on `libprussdrv` and move to using `rproc`. I was not sure if rproc provides some functionalities to access the PRU's RAM the way `prussdrv_map_prumem()` used to, that essentially gives access to a previously mmap'ed area of memory. <br>
-	On the latest Bela code there's a `Mmap` class which can make this somehow simpler ([ref. here](http://docs.bela.io/classMmap.html)). <br>
-	For this transition, maintaining backward compatibility was also quite essential. This is what the `PruManager` class achieves. Below is a rough structure of the [class `PruManager`:](https://github.com/giuliomoro/Bela-dhruva/blob/BBAI-support/include/PruManager.h)<br>
-	- `class PruManager` is an abstract base class<br>
-	**Protected variables:** [see here](https://github.com/giuliomoro/Bela-dhruva/blob/BBAI-support/include/PruManager.h#L23-L26)<br>
-	**functions:**<br>
-		- `void stop();` as the name suggests, stops the PRU
-		- `int start(bool useMcaspIrq);` The first start is called by the `PRU.cpp` code where required, where `useMcaspIrq` is a flag that decides which pru code is to be used out of `pru_rtaudio.p` and `pru_rtaudio_irq.p`.
-		- `int start(const std::string& path);` The second start is called within the first one after the choice of PRU code is made. This function then does the job of loading the firmware file and starting the PRU.
-		- `void* getOwnMemory();` Each PRU has is own 8-KiB data RAM per PRU CPU (signified RAM0 for PRU0 and RAM1 for PRU1) and 32-KiB general purpose memory RAM (signified RAM2) shared between PRU0 and PRU1. (ref. [prucookbook](https://beagleboard.org/static/prucookbook/#_memory_allocation))
-		- `void* getSharedMemory();` refer the DATA RAM2 (shared) block in the diagram below from the AM572x Ref. Manual<br>These last 2 functions are responsible for accessing the data memory and shared memory respectively.<br>![](photos/PRU-overview.png)
+I initially believed that I needed to change the initialization code in [PRU.cpp](https://github.com/BelaPlatform/Bela/blob/master/core/PRU.cpp#L18) that is currently relying on `libprussdrv` and move to using `rproc`. I was not sure if rproc provides some functionalities to access the PRU's RAM the way `prussdrv_map_prumem()` used to, that essentially gives access to a previously mmap'ed area of memory. <br>
+On the latest Bela code there's a `Mmap` class which can make this somehow simpler ([ref. here](http://docs.bela.io/classMmap.html)). <br>
+For this transition, maintaining backward compatibility was also quite essential. This is what the `PruManager` class achieves. Below is a rough structure of the [class `PruManager`:](https://github.com/giuliomoro/Bela-dhruva/blob/BBAI-support/include/PruManager.h)<br>
+- `class PruManager` is an abstract base class<br> **Protected variables:** [see here](https://github.com/giuliomoro/Bela-dhruva/blob/BBAI-support/include/PruManager.h#L23-L26)<br> **functions:**<br>
+- `void stop();` as the name suggests, stops the PRU
+- `int start(bool useMcaspIrq);` The first start is called by the `PRU.cpp` code where required, where `useMcaspIrq` is a flag that decides which pru code is to be used out of `pru_rtaudio.p` and `pru_rtaudio_irq.p`.
+- `int start(const std::string& path);` The second start is called within the first one after the choice of PRU code is made. This function then does the job of loading the firmware file and starting the PRU.
+- `void* getOwnMemory();` Each PRU has is own 8-KiB data RAM per PRU CPU (signified RAM0 for PRU0 and RAM1 for PRU1) and 32-KiB general purpose memory RAM (signified RAM2) shared between PRU0 and PRU1. (ref. [prucookbook](https://beagleboard.org/static/prucookbook/#_memory_allocation))
+- `void* getSharedMemory();` refer the DATA RAM2 (shared) block in the diagram below from the AM572x Ref. Manual<br>These last 2 functions are responsible for accessing the data memory and shared memory respectively.<br>![](photos/PRU-overview.png)
 
-	The classes below are children of the above `PruManager` virtual base class.
-	- `class PruManagerRprocMmap` is responsible for RProc implementation.
-	The RProc Mmap class is named so, because we are also using the `Mmap.h` header mentioned above to access `/dev/mem` on the BeagleBones to read or write to desired global memory locations.<br>
-	This class is currently being used only on the AM572x processor (_ie. the BBAI_).
-		- The constructor of this class sets the path variables and depending on the device it is being compiled on, sets the `prussAddresses` which is a vector of type `<uint32_t>` and is responsible for keeping the base addresses of the 2 PRU Sub Systems.
-		- The `getOwnMemory()` then accesses the DATA RAM using an object of `class Mmap` called `ownMemory`:<br> `ownMemory.map(prussAddresses[pruss - 1] + prussOwnRamOffsets[pruCore], 0x2000);` <br>The `map()` takes the parameters _offset_ and _size_ of the memory to be accessed. The `dataram0` and `1` (shown in the PRU-ICSS  block diagram) is `8-KiB` and hence the second parameter is set as `0x2000`.
-		- The `getSharedMemory` function then accesses the shared RAM using an object of `class Mmap` called `sharedMemory`:<br> `sharedMemory.map(prussAddresses[pruss - 1] + prussSharedRamOffset, 0x8000);` <br>The general purpose memory RAM (signified RAM2) shared between PRU0 and PRU1 is `32-KiB` hence here it's `0x8000`.
-	- `class PruManagerUio` is basically a ditto implementation of the `libprussdrv` approach that was being used earlier. This class is mainly useful to maintain backward compatibility with v4.14 on the BBB+Bela. It _does not_ support the AM572x processor.
-	- The Makefile passes the flags `ENABLE_PRU_RPROC` which tells the core/codes to use the RProc implementation _or else_ `ENABLE_PRU_UIO` tells the core/codes to keep using the old `libprussdrv` implementation.
+The classes below are children of the above `PruManager` virtual base class.
+- `class PruManagerRprocMmap` is responsible for RProc implementation.
+The RProc Mmap class is named so, because we are also using the `Mmap.h` header mentioned above to access `/dev/mem` on the BeagleBones to read or write to desired global memory locations.<br>
+This class is currently being used only on the AM572x processor (_ie. the BBAI_).
+- The constructor of this class sets the path variables and depending on the device it is being compiled on, sets the `prussAddresses` which is a vector of type `<uint32_t>` and is responsible for keeping the base addresses of the 2 PRU Sub Systems.
+- The `getOwnMemory()` then accesses the DATA RAM using an object of `class Mmap` called `ownMemory`:<br> `ownMemory.map(prussAddresses[pruss - 1] + prussOwnRamOffsets[pruCore], 0x2000);` <br>The `map()` takes the parameters _offset_ and _size_ of the memory to be accessed. The `dataram0` and `1` (shown in the PRU-ICSS  block diagram) is `8-KiB` and hence the second parameter is set as `0x2000`.
+- The `getSharedMemory` function then accesses the shared RAM using an object of `class Mmap` called `sharedMemory`:<br> `sharedMemory.map(prussAddresses[pruss - 1] + prussSharedRamOffset, 0x8000);` <br>The general purpose memory RAM (signified RAM2) shared between PRU0 and PRU1 is `32-KiB` hence here it's `0x8000`.
+- `class PruManagerUio` is basically a ditto implementation of the `libprussdrv` approach that was being used earlier. This class is mainly useful to maintain backward compatibility with v4.14 on the BBB+Bela. It _does not_ support the AM572x processor.
+- The Makefile passes the flags `ENABLE_PRU_RPROC` which tells the core/codes to use the RProc implementation _or else_ `ENABLE_PRU_UIO` tells the core/codes to keep using the old `libprussdrv` implementation.
 
 3. **PRU Codes:** In `pru/pru_rtaudio.p` the hard-coded McASP, SPI and GPIO constants were replaced with board-dependent ones using `board_specific.h`.<br>
 `pru/board_specific.h` uses the `IS_AM572x` to set the proper BASE constants depending on which board it is compiling on. The GPIO, `CLOCK_MCASP1`, MCASP1, `CLOCK_SPI2`, SPI2, and a few other Base Addresses needed changing in the AM572x. For more details [visit my PR](https://github.com/BelaPlatform/Bela/pull/669/files).
