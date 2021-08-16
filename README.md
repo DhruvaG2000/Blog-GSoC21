@@ -5,8 +5,8 @@
 This project proposes to provide restructuring and improvement of existing Bela Software Code to allow for compatibility and easier transition to newer Texas Instrument Sitara Processors (like the AM5729 in the BeagleBone AI).
 
 ## About
-- _Student Name:_ Dhruva Gole
-- _Mentors:_ ﻿[Giulio Moro](https://github.com/giuliomoro), Stephen Arnold and Robert Manzke
+- _Student Name:_ [Dhruva Gole](https://dhruvagole.tech)
+- _Mentors:_ [Giulio Moro](https://github.com/giuliomoro), Stephen Arnold and Robert Manzke
 - _GSoC Entry link:_ [GSoC entry #5697403266531328](https://summerofcode.withgoogle.com/projects/#5697403266531328)
 - _Wiki:_ [BB.org forum bela-support-for-bbai](https://forum.beagleboard.org/t/bela-support-for-bbai-later-ti-chips/29257/7)
 - _Blog Link:_ [Bela Support for BBAI](https://dhruvag2000.github.io/Blog-GSoC21/) <br>
@@ -21,7 +21,7 @@ This project has been done as part of Google Summer of Code 2021 with the Beagle
 2. [Implementation Details](#implementation)
 	- [Background](#background)
 	- [Code Overview](#code)
-3. [Achieved Mmilestones](#milestones)
+3. [Achieved Milestones](#milestones)
 4. [Pull Requests](#PR)
 5. [Project Shortcomings](#shortcomings)
 6. [Benefit](#benefit)
