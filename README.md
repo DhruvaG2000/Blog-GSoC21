@@ -16,7 +16,18 @@ This project has been done as part of Google Summer of Code 2021 with the Beagle
 	- A small demonstration of the Trill Bar being played with Bela Cape on the BBAI: [click here](https://youtu.be/AiqcA5NhkvM).
 - _Bela AI image_: [download belaAI.img.xz from here](https://github.com/DhruvaG2000/Bela/releases/tag/v1.0) to easily get started with Bela on BBAI.
 
-## Introduction
+## Table of Contents
+1. [Introduction](#intro)
+2. [Implementation Details](#implementation)
+	- [Background](#background)
+	- [Code Overview](#code)
+3. [Achieved Mmilestones](#milestones)
+4. [Pull Requests](#PR)
+5. [Project Shortcomings](#shortcomings)
+6. [Benefit](#benefit)
+7. [References](#ref)
+
+## Introduction <a name="intro"></a>
 As given on the [official website](https://learn.bela.io/get-started-guide/say-hello-to-bela/#what-is-bela), Bela is a hardware and software system for creating beautiful interaction with sensors and sound.<br>
 Bela has a lot of analog and digital inputs and outputs for hooking up sensors and controlling other devices, and most importantly Bela has _stereo audio i/o_  allowing you to interact with the world of sound. <br>
 All Bela systems so far use the same Bela software. It uses a customized Debian distribution which - most notably - uses a _Xenomai kernel_ instead of a stock kernel. _Xenomai_ is _co-kernel_ for Linux which allows to achieve hard ___real-time performance___ on Linux machines ([ref: xenomai.org](http://xenomai.org/)). It thus takes advantage of features of the BeagleBone computers and can achieve extremely low-latency audio and sensor processing times. <br>
@@ -48,11 +59,11 @@ Programming languages and tools to be used:
 
 _C, C++, PRU, dtb, GNU Make, ARM Assembly_
 
-## Implementation Details
+## Implementation Details <a name="implementation"></a>
 The hardware was partially working on the BBAI using only ALSA([Advanced Linux Sound Architecture](https://en.wikipedia.org/wiki/Advanced_Linux_Sound_Architecture)) and the SPI driver [(refer)](https://github.com/giuliomoro/beaglebone-ai-bela). However, the Bela real-time code on ARM and PRU was not running on the BBAI yet.<br>
 This project involved dealing with pinmuxing (using overlays), PRU assembly, C and C++ for Linux user space applications and I also had to study the Technical Reference Manual of the Sitara family of SoCs. ([AM5729](https://www.ti.com/lit/ug/spruhz6l/spruhz6l.pdf)  and the AM335x).
 
-### Background
+### Background <a name="background"></a>
 
 **What is RProc?** <br>
 The remoteproc framework allows different platforms/architectures to
@@ -97,7 +108,7 @@ The hardware listed below was used for testing if my code implementation works c
 4. LEDs, jumper wires, Multimeter, etc.
 5. A Fan Cape
 
-### Details of Implementation
+### Code Overview <a name="code"></a>
 
 The places within the Bela core code that required intervention are:<br>
 #### The [**Makefile:**](https://github.com/giuliomoro/Bela-dhruva/blob/BBAI-support/Makefile#L297)
@@ -169,7 +180,7 @@ Other places like `Gpio.cpp`, `bela_hw_settings.h`, and a few other codes also n
 and, a debugger for PRU called [PRUDebug](https://github.com/giuliomoro/prudebug/tree/master) was ported to the BBAI.
 
 
-## Achieved Milestones
+## Achieved Milestones <a name="milestones"></a>
 
 1. Created a device tree overlay using [Cape Compatibility layer](https://elinux.org/Beagleboard:BeagleBone_cape_interface_spec) to port [BB-BONE-AUDI](https://github.com/beagleboard/bb.org-overlays/blob/master/src/arm/BB-BONE-AUDI-02-00A0.dts) overlay to the BBAI. <br>
 The Overlay I wrote has been accepted by BeagleBone maintainer Robert Nelson, and you can find it to [here](https://github.com/beagleboard/BeagleBoard-DeviceTrees/blob/v4.19.x-ti-overlays/src/arm/overlays/BBAI-AUDI-02-00A0.dts)
@@ -193,24 +204,25 @@ The Overlay I wrote has been accepted by BeagleBone maintainer Robert Nelson, an
 	- [prudbg.c](https://github.com/giuliomoro/prudebug/blob/master/prudbg.c)
 
 
-## Pull Requests
+## Pull Requests <a name="PR"></a>
 
-1. [beagleboard/BeagleBoard-DeviceTrees BBAI-AUDI-02-00A0 overlay using the CCL #33](https://github.com/beagleboard/BeagleBoard-DeviceTrees/pull/33)
+1. [beagleboard/BeagleBoard-DeviceTrees BBAI-AUDI-02-00A0 overlay using the CCL PR#33](https://github.com/beagleboard/BeagleBoard-DeviceTrees/pull/33)
 
-2. [BBAI-AUDI-02-00A0.dts: Solved the output audio frequency issue #36 ](https://github.com/beagleboard/BeagleBoard-DeviceTrees/pull/36)
+2. [BBAI-AUDI-02-00A0.dts: Solved the output audio frequency issue in PR#36 ](https://github.com/beagleboard/BeagleBoard-DeviceTrees/pull/36)
 
-3. [cloud9-examples Corrected: solved a compilation issue #57 ](https://github.com/beagleboard/cloud9-examples/pull/57)
+3. [cloud9-examples Corrected: solved a compilation in PR#57](https://github.com/beagleboard/cloud9-examples/pull/57)
 
-4. [Bela: PruManager Rproc + MMap/ prussdrv+UIO implementation](https://github.com/giuliomoro/Bela-dhruva/pull/1)
+4. [Bela: PruManager Rproc + MMap/ prussdrv+UIO implementation PR#1](https://github.com/giuliomoro/Bela-dhruva/pull/1)
 
-5. [giuliomoro/prudebug: Add support for AM57x #2](https://github.com/giuliomoro/prudebug/pull/2)
+5. [giuliomoro/prudebug: Add support for AM57x PR#2](https://github.com/giuliomoro/prudebug/pull/2)
 
-6. [MarkAYoder/BeagleBoard-exercises: prudebug: Add BBAI support #7](https://github.com/MarkAYoder/BeagleBoard-exercises/pull/7)
+6. [MarkAYoder/BeagleBoard-exercises: prudebug: Add BBAI support PR#7](https://github.com/MarkAYoder/BeagleBoard-exercises/pull/7)
 
-7. [Bela: Add support for BeagleBone AI #668](https://github.com/BelaPlatform/Bela/pull/668)
+7. [Bela: Add support for BeagleBone AI PR#668](https://github.com/BelaPlatform/Bela/pull/668)
 
+8. [Documentation: using Doxygen for PruManager PR#4](https://github.com/giuliomoro/Bela-dhruva/pull/4)
 
-## Project Shortcomings
+## Project Shortcomings <a name="shortcomings"></a>
 
 Due to the introduction of a new concept called `IRQ_CROSSBAR` for handling interrupts from peripherals in the AM572x chips, porting the existing codes from BELA that use interrupts proved to be a bit complicated.<br>
 After going through the AM572x manual, [a workflow](https://dhruvag2000.github.io/Blog-GSoC21/pru-icss.html#18464-irq_crossbar-module-functional-description) was suggested. However on testing this workflow there still seem to be a few steps missing.
@@ -225,7 +237,7 @@ Materials referred were: [AM572x sitara manual](https://www.google.com/url?sa=t&
 - The interrupts in AM572x turned out to be much complicated than AM335x due to a new concept called `IRQ_CROSSBARS` which me and the Bela team have been working on for a few days. This may take some more time to implement. (however, this shouldn't be much of a deal-breaker for most users)
 - The PRU --> ARM interrupts are also yet to be implemented as the driver [rtdm_pruss_irq](https://github.com/BelaPlatform/rtdm_pruss_irq) could not be easily ported by just changing the [BASE ADDRESS](https://github.com/BelaPlatform/rtdm_pruss_irq/blob/master/rtdm_pruss_irq.c#L13)
 
-## Benefit
+## Benefit <a name="benefit"></a>
 
 This project adds support for the Bela cape + Xenomai + PRU on the BeagleBone AI, and also the code will now be easier to port to other Texas Instruments systems-on-chips.
 
@@ -237,7 +249,7 @@ This project adds support for the Bela cape + Xenomai + PRU on the BeagleBone AI
 
 -A User on Bela Forum
 
-## References
+## References <a name="ref"></a>
 
 1. [BBAI System-Reference-Manual](https://github.com/beagleboard/beaglebone-ai/wiki/System-Reference-Manual)
 2. [AM572x Sitara Processor Technical Reference Manual (Rev. L)](https://www.ti.com/lit/ug/spruhz6l/spruhz6l.pdf)
